@@ -9,10 +9,26 @@ datasource db {
   referentialIntegrity = "prisma"
 }
 
-model Example {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model TodoItem {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  title       String    @db.VarChar(150)
+  description String?   @db.VarChar(300)
+  isDone      DateTime?
+  projectId   String
+
+  TodoProject TodoProject @relation(fields: [projectId], references: [id])
+}
+
+model TodoProject {
+  id        String     @id @default(cuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  name      String     @db.VarChar(150)
+  ownerId   String
+  User      User       @relation(fields: [ownerId], references: [id])
+  TodoItem  TodoItem[]
 }
 
 // Necessary for Next auth
@@ -43,13 +59,14 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  TodoProject   TodoProject[]
 }
 
 model VerificationToken {
