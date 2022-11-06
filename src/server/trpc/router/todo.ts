@@ -40,6 +40,17 @@ export const todoRouter = router({
         goals: goals,
       };
     }),
+  deleteGoal: protectedProcedure
+    .input(
+      z.object({
+        goalId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await prisma.goal.delete({
+        where: { id: input.goalId },
+      });
+    }),
   createTodo: protectedProcedure
     .input(
       z.object({
@@ -91,5 +102,16 @@ export const todoRouter = router({
           goalName: todo.Goal.name,
         })),
       };
+    }),
+  deleteTodo: protectedProcedure
+    .input(
+      z.object({
+        todoId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await prisma.todo.delete({
+        where: { id: input.todoId },
+      });
     }),
 });
