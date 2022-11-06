@@ -4,82 +4,91 @@ import { router, protectedProcedure } from "../trpc";
 import { prisma } from "../../db/client";
 
 export const todoRouter = router({
-  createTodoProject: protectedProcedure
-    .input(z.object({ name: z.string() }))
-    .output(z.object({ name: z.string(), id: z.string() }))
+  createGoal: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      })
+    )
+    .output(
+      z.object({
+        name: z.string(),
+        id: z.string(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
-      const project = await prisma.todoProject.create({
+      const goal = await prisma.goal.create({
         data: {
           name: input.name,
           ownerId: ctx.session.user.id,
         },
       });
-      return { name: project.name, id: project.id };
+      return { name: goal.name, id: goal.id };
     }),
-  getTodoProjects: protectedProcedure
+  getGoals: protectedProcedure
     .output(
       z.object({
-        projects: z.array(z.object({ name: z.string(), id: z.string() })),
+        goals: z.array(z.object({ name: z.string(), id: z.string() })),
       })
     )
     .query(async ({ ctx }) => {
-      const projects = await prisma.todoProject.findMany({
+      const goals = await prisma.goal.findMany({
         where: { ownerId: ctx.session.user.id },
       });
 
       return {
-        projects: projects,
+        goals: goals,
       };
     }),
-  createTodoItem: protectedProcedure
+  createTodo: protectedProcedure
     .input(
       z.object({
         title: z.string(),
         description: z.string().nullable(),
-        projectId: z.string(),
+        goalId: z.string(),
       })
     )
     .mutation(async ({ input }) => {
-      prisma.todoItem.create({
+      prisma.todo.create({
         data: {
           title: input.title,
           description: input.description,
-          projectId: input.projectId,
+          goalId: input.goalId,
         },
       });
       return {};
     }),
-  getTodoItems: protectedProcedure
+  getTodos: protectedProcedure
     .input(
       z.object({
-        projectIds: z.array(z.string()).default([]),
+        goalIds: z.array(z.string()).default([]),
       })
     )
     .output(
       z.object({
-        todoItems: z.array(
+        todos: z.array(
           z.object({
             title: z.string(),
             isDone: z.boolean(),
-            projectName: z.string(),
+            goalName: z.string(),
           })
         ),
       })
     )
     .query(async ({ input, ctx }) => {
-      const todoItems = await prisma.todoItem.findMany({
+      const todos = await prisma.todo.findMany({
         where: {
-          projectId: { in: input.projectIds },
-          TodoProject: { ownerId: ctx.session.user.id },
+          goalId: { in: input.goalIds },
+          Goal: { ownerId: ctx.session.user.id },
         },
-        include: { TodoProject: true },
+        include: { Goal: true },
       });
 
       return {
-        todoItems: todoItems.map((todoItem) => ({
-          title: todoItem.title,
+        todos: todos.map((todo) => ({
+          title: todo.title,
           isDone: false,
-          projectName: todoItem.TodoProject.name,
+          goalName: todo.Goal.name,
         })),
       };
     }),
