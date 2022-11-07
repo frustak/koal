@@ -70,7 +70,7 @@ export const todoRouter = router({
         goalId: z.string(),
       })
     )
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input }) => {
       await prisma.goal.delete({
         where: { id: input.goalId },
       });
