@@ -7,8 +7,6 @@ import { trpc } from "../utils/trpc";
 import { useState } from "react";
 
 const Home: NextPage = () => {
-  const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
-
   return (
     <>
       <Head>
@@ -53,9 +51,7 @@ const Home: NextPage = () => {
             documentation="https://www.prisma.io/docs/"
           />
         </div>
-        <div className="flex w-full items-center justify-center pt-6 text-2xl text-blue-500">
-          {hello.data ? <p>{hello.data.greeting}</p> : <p>Loading..</p>}
-        </div>
+        <div className="flex w-full items-center justify-center pt-6 text-2xl text-blue-500"></div>
         <AuthShowcase />
         <GoalsList />
         <GoalSubmitForm />
@@ -93,8 +89,6 @@ const AuthShowcase: React.FC = () => {
 
 const GoalsList: React.FC = () => {
   const { data: goals, isLoading } = trpc.todo.getGoals.useQuery();
-
-  const { data: sessionData } = useSession();
 
   if (isLoading) return <div> fetching goals </div>;
 
