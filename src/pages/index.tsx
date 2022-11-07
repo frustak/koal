@@ -4,6 +4,7 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { trpc } from "../utils/trpc";
+import { useState } from "react";
 
 const Home: NextPage = () => {
   const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
@@ -56,6 +57,8 @@ const Home: NextPage = () => {
           {hello.data ? <p>{hello.data.greeting}</p> : <p>Loading..</p>}
         </div>
         <AuthShowcase />
+        <GoalsList />
+        <GoalSubmitForm />
       </main>
     </>
   );
@@ -85,6 +88,52 @@ const AuthShowcase: React.FC = () => {
         {sessionData ? "Sign out" : "Sign in"}
       </button>
     </div>
+  );
+};
+
+const GoalsList: React.FC = () => {
+  const { data: goals, isLoading } = trpc.todo.getGoals.useQuery();
+
+  const { data: sessionData } = useSession();
+
+  if (isLoading) return <div> fetching goals </div>;
+
+  return (
+    <div>Your goals: {goals?.goals.map((goal, _) => `${goal.name} , `)}</div>
+  );
+};
+
+const GoalSubmitForm = () => {
+  const [message, setMessage] = useState("");
+  const createGoal = trpc.todo.createGoal.useMutation();
+
+  return (
+    <form
+      className="flex gap-2"
+      onSubmit={(event) => {
+        event.preventDefault();
+        createGoal.mutate({
+          name: message,
+        });
+        setMessage("");
+      }}
+    >
+      <input
+        type="text"
+        value={message}
+        placeholder="Goal name"
+        minLength={2}
+        maxLength={100}
+        onChange={(event) => setMessage(event.target.value)}
+        className="rounded-md border-2 border-zinc-800 bg-neutral-900 px-4 py-2 focus:outline-none"
+      />
+      <button
+        type="submit"
+        className="rounded-md border-2 border-zinc-800 p-2 focus:outline-none"
+      >
+        Submit
+      </button>
+    </form>
   );
 };
 

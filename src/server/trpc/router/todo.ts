@@ -4,83 +4,172 @@ import { router, protectedProcedure } from "../trpc";
 import { prisma } from "../../db/client";
 
 export const todoRouter = router({
-  createTodoProject: protectedProcedure
-    .input(z.object({ name: z.string() }))
-    .output(z.object({ name: z.string(), id: z.string() }))
+  createGoal: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      })
+    )
+    .output(
+      z.object({
+        name: z.string(),
+        id: z.string(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
-      const project = await prisma.todoProject.create({
+      const goal = await prisma.goal.create({
         data: {
           name: input.name,
           ownerId: ctx.session.user.id,
         },
       });
-      return { name: project.name, id: project.id };
+      return { name: goal.name, id: goal.id };
     }),
-  getTodoProjects: protectedProcedure
+  updateGoal: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string().optional(),
+      })
+    )
     .output(
       z.object({
-        projects: z.array(z.object({ name: z.string(), id: z.string() })),
+        id: z.string(),
+        title: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const updatedTodo = await prisma.todo.update({
+        data: {
+          title: input.title,
+        },
+        where: {
+          id: input.id,
+        },
+      });
+      return updatedTodo;
+    }),
+  getGoals: protectedProcedure
+    .output(
+      z.object({
+        goals: z.array(z.object({ name: z.string(), id: z.string() })),
       })
     )
     .query(async ({ ctx }) => {
-      const projects = await prisma.todoProject.findMany({
+      const goals = await prisma.goal.findMany({
         where: { ownerId: ctx.session.user.id },
       });
 
       return {
-        projects: projects,
+        goals: goals,
       };
     }),
-  createTodoItem: protectedProcedure
+  deleteGoal: protectedProcedure
+    .input(
+      z.object({
+        goalId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await prisma.goal.delete({
+        where: { id: input.goalId },
+      });
+    }),
+  createTodo: protectedProcedure
     .input(
       z.object({
         title: z.string(),
         description: z.string().nullable(),
-        projectId: z.string(),
-      })
-    )
-    .mutation(async ({ input }) => {
-      prisma.todoItem.create({
-        data: {
-          title: input.title,
-          description: input.description,
-          projectId: input.projectId,
-        },
-      });
-      return {};
-    }),
-  getTodoItems: protectedProcedure
-    .input(
-      z.object({
-        projectIds: z.array(z.string()).default([]),
+        goalId: z.string(),
       })
     )
     .output(
       z.object({
-        todoItems: z.array(
+        id: z.string(),
+        title: z.string(),
+        description: z.string().nullish(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const createdTodo = await prisma.todo.create({
+        data: {
+          title: input.title,
+          description: input.description,
+          goalId: input.goalId,
+        },
+      });
+      return createdTodo;
+    }),
+  updateTodo: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string().optional(),
+        description: z.string().optional(),
+      })
+    )
+    .output(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        description: z.string().nullish(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const updatedTodo = await prisma.todo.update({
+        data: {
+          title: input.title,
+          description: input.description,
+        },
+        where: {
+          id: input.id,
+        },
+      });
+      return updatedTodo;
+    }),
+  getTodos: protectedProcedure
+    .input(
+      z.object({
+        goalIds: z.array(z.string()).default([]),
+      })
+    )
+    .output(
+      z.object({
+        todos: z.array(
           z.object({
             title: z.string(),
             isDone: z.boolean(),
-            projectName: z.string(),
+            goalName: z.string(),
           })
         ),
       })
     )
     .query(async ({ input, ctx }) => {
-      const todoItems = await prisma.todoItem.findMany({
+      const todos = await prisma.todo.findMany({
         where: {
-          projectId: { in: input.projectIds },
-          TodoProject: { ownerId: ctx.session.user.id },
+          goalId: { in: input.goalIds },
+          Goal: { ownerId: ctx.session.user.id },
         },
-        include: { TodoProject: true },
+        include: { Goal: true },
       });
 
       return {
-        todoItems: todoItems.map((todoItem) => ({
-          title: todoItem.title,
+        todos: todos.map((todo) => ({
+          title: todo.title,
           isDone: false,
-          projectName: todoItem.TodoProject.name,
+          goalName: todo.Goal.name,
         })),
       };
+    }),
+  deleteTodo: protectedProcedure
+    .input(
+      z.object({
+        todoId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      prisma.todo.delete({
+        where: { id: input.todoId },
+      });
     }),
 });
