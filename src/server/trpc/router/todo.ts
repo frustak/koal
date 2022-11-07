@@ -32,8 +32,14 @@ export const todoRouter = router({
         title: z.string().optional(),
       })
     )
+    .output(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+      })
+    )
     .mutation(async ({ input }) => {
-      prisma.todo.update({
+      const updatedTodo = await prisma.todo.update({
         data: {
           title: input.title,
         },
@@ -41,7 +47,7 @@ export const todoRouter = router({
           id: input.id,
         },
       });
-      return {};
+      return updatedTodo;
     }),
   getGoals: protectedProcedure
     .output(
@@ -77,15 +83,22 @@ export const todoRouter = router({
         goalId: z.string(),
       })
     )
+    .output(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        description: z.string().nullish(),
+      })
+    )
     .mutation(async ({ input }) => {
-      prisma.todo.create({
+      const createdTodo = await prisma.todo.create({
         data: {
           title: input.title,
           description: input.description,
           goalId: input.goalId,
         },
       });
-      return {};
+      return createdTodo;
     }),
   updateTodo: protectedProcedure
     .input(
@@ -95,8 +108,15 @@ export const todoRouter = router({
         description: z.string().optional(),
       })
     )
+    .output(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        description: z.string().nullish(),
+      })
+    )
     .mutation(async ({ input }) => {
-      prisma.todo.update({
+      const updatedTodo = await prisma.todo.update({
         data: {
           title: input.title,
           description: input.description,
@@ -105,7 +125,7 @@ export const todoRouter = router({
           id: input.id,
         },
       });
-      return {};
+      return updatedTodo;
     }),
   getTodos: protectedProcedure
     .input(
@@ -147,8 +167,8 @@ export const todoRouter = router({
         todoId: z.string(),
       })
     )
-    .mutation(async ({ input, ctx }) => {
-      await prisma.todo.delete({
+    .mutation(async ({ input }) => {
+      prisma.todo.delete({
         where: { id: input.todoId },
       });
     }),
