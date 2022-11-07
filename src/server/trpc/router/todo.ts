@@ -25,6 +25,24 @@ export const todoRouter = router({
       });
       return { name: goal.name, id: goal.id };
     }),
+  updateGoal: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      prisma.todo.update({
+        data: {
+          title: input.title,
+        },
+        where: {
+          id: input.id,
+        },
+      });
+      return {};
+    }),
   getGoals: protectedProcedure
     .output(
       z.object({
@@ -65,6 +83,26 @@ export const todoRouter = router({
           title: input.title,
           description: input.description,
           goalId: input.goalId,
+        },
+      });
+      return {};
+    }),
+  updateTodo: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string().optional(),
+        description: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      prisma.todo.update({
+        data: {
+          title: input.title,
+          description: input.description,
+        },
+        where: {
+          id: input.id,
         },
       });
       return {};
