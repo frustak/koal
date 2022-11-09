@@ -12,7 +12,7 @@ const Home: NextPage = () => {
         <meta name="description" content="Time management at it's finest" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <main className="container flex flex-col items-center justify-center min-h-screen p-4">
+      <main className="container flex flex-col items-center justify-center min-h-screen gap-6">
         <AuthShowcase />
         <GoalsList />
         <GoalSubmitForm />
@@ -75,7 +75,7 @@ const GoalSubmitForm = () => {
         minLength={2}
         maxLength={100}
         onChange={(event) => setMessage(event.target.value)}
-        className="px-4 py-2 border-2 rounded-md border-zinc-800 bg-neutral-900 focus:outline-none"
+        className="px-4 py-2 border-2 rounded-md border-zinc-800 bg-neutral-900 text-neutral-100 focus:outline-none"
       />
       <button
         type="submit"
