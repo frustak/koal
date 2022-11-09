@@ -24,31 +24,35 @@ const Home: NextPage = () => {
 export default Home;
 
 const AuthShowcase = () => {
-  const { data: sessionData } = useSession();
+  const session = useSession();
 
   return (
     <div className="flex flex-col items-center justify-center gap-2">
-      {sessionData && (
+      {session.data && (
         <p className="text-2xl text-blue-500">
-          Logged in as {sessionData?.user?.name}
+          Logged in as {session.data?.user?.name}
         </p>
       )}
       <button
         className="px-4 py-2 text-xl border border-black rounded-md shadow-lg bg-violet-50 hover:bg-violet-100"
-        onClick={sessionData ? () => signOut() : () => signIn()}
+        onClick={() => (session.data ? signOut() : signIn())}
       >
-        {sessionData ? "Sign out" : "Sign in"}
+        {session.data ? "Sign out" : "Sign in"}
       </button>
     </div>
   );
 };
 
 const GoalsList = () => {
-  const { data: goals, isLoading } = trpc.todo.getGoals.useQuery();
+  const goalsQuery = trpc.todo.getGoals.useQuery();
 
-  if (isLoading) return <div> fetching goals </div>;
+  if (goalsQuery.isLoading) return <div> fetching goals </div>;
 
-  return <div>Your goals: {goals?.goals.map((goal) => `${goal.name} , `)}</div>;
+  return (
+    <div>
+      Your goals: {goalsQuery.data?.goals.map((goal) => `${goal.name} , `)}
+    </div>
+  );
 };
 
 const GoalSubmitForm = () => {
@@ -60,9 +64,7 @@ const GoalSubmitForm = () => {
       className="flex gap-2"
       onSubmit={(event) => {
         event.preventDefault();
-        createGoal.mutate({
-          name: message,
-        });
+        createGoal.mutate({ name: message });
         setMessage("");
       }}
     >
