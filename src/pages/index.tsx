@@ -23,7 +23,7 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const AuthShowcase: React.FC = () => {
+const AuthShowcase = () => {
   const { data: secretMessage } = trpc.auth.getSecretMessage.useQuery();
   const { data: sessionData } = useSession();
 
@@ -47,7 +47,7 @@ const AuthShowcase: React.FC = () => {
   );
 };
 
-const GoalsList: React.FC = () => {
+const GoalsList = () => {
   const { data: goals, isLoading } = trpc.todo.getGoals.useQuery();
 
   if (isLoading) return <div> fetching goals </div>;
