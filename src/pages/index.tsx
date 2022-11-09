@@ -12,7 +12,7 @@ const Home: NextPage = () => {
         <meta name="description" content="Time management at it's finest" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <main className="container flex flex-col items-center justify-center min-h-screen p-4 mx-auto">
+      <main className="container flex flex-col items-center justify-center min-h-screen p-4">
         <AuthShowcase />
         <GoalsList />
         <GoalSubmitForm />
@@ -24,7 +24,6 @@ const Home: NextPage = () => {
 export default Home;
 
 const AuthShowcase = () => {
-  const { data: secretMessage } = trpc.auth.getSecretMessage.useQuery();
   const { data: sessionData } = useSession();
 
   return (
@@ -33,9 +32,6 @@ const AuthShowcase = () => {
         <p className="text-2xl text-blue-500">
           Logged in as {sessionData?.user?.name}
         </p>
-      )}
-      {secretMessage && (
-        <p className="text-2xl text-blue-500">{secretMessage}</p>
       )}
       <button
         className="px-4 py-2 text-xl border border-black rounded-md shadow-lg bg-violet-50 hover:bg-violet-100"
