@@ -10,7 +10,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Koal</title>
         <meta name="description" content="Time management at it's finest" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
       <main className="container flex flex-col items-center justify-center min-h-screen p-4 mx-auto">
         <AuthShowcase />
