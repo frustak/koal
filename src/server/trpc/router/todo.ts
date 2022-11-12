@@ -127,6 +127,23 @@ export const todoRouter = router({
       });
       return updatedTodo;
     }),
+  updateTodoStatus: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        isDone: z.boolean(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await prisma.todo.update({
+        data: {
+          isDone: new Date(),
+        },
+        where: {
+          id: input.id,
+        },
+      });
+    }),
   getTodos: protectedProcedure
     .input(
       z.object({
