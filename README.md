@@ -28,7 +28,7 @@ Now install the project dependencies and run migrations on DB:
 
 ```bash
 pnpm install
-prisma push db
+pnpx prisma db push
 ```
 
 Then run the project with `pnpm dev`.
