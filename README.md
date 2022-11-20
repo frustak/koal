@@ -2,10 +2,10 @@
 
 Manage your time & energy.
 
-- [Develpment](#develpment)
+- [Development](#develpment)
   - [Running locally](#running-locally)
 
-## Develpment
+## Development
 
 ### Running locally
 
