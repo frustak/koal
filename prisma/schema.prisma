@@ -22,13 +22,27 @@ model Todo {
 }
 
 model Goal {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String   @db.VarChar(150)
+  id        String     @id @default(cuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  name      String     @db.VarChar(150)
   ownerId   String
-  User      User     @relation(fields: [ownerId], references: [id])
+  User      User       @relation(fields: [ownerId], references: [id])
   Todo      Todo[]
+  DayFocus  DayFocus[]
+}
+
+model DayFocus {
+  // What is important for the day?
+  id             String    @id @default(cuid())
+  date           DateTime  @default(now())
+  ownerId        String
+  goalId         String
+  focusTimeStart DateTime
+  focusTimeEnd   DateTime
+
+  User User @relation(fields: [ownerId], references: [id])
+  Goal Goal @relation(fields: [goalId], references: [id])
 }
 
 // Necessary for Next auth
@@ -59,14 +73,15 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?    @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
   goals         Goal[]
+  DayFocus      DayFocus[]
 }
 
 model VerificationToken {
