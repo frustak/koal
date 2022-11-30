@@ -12,8 +12,9 @@ const Home: NextPage = () => {
         <meta name="description" content="Time management at it's finest" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <main className="container flex flex-col items-center justify-center min-h-screen gap-6">
-        <AuthShowcase />
+
+      <main className="container flex min-h-screen flex-col items-center justify-center gap-6">
+        <Authentication />
         <GoalsList />
         <GoalSubmitForm />
       </main>
@@ -23,7 +24,7 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const AuthShowcase = () => {
+const Authentication = () => {
   const session = useSession();
 
   return (
@@ -34,7 +35,7 @@ const AuthShowcase = () => {
         </p>
       )}
       <button
-        className="px-4 py-2 text-xl border border-black rounded-md shadow-lg bg-violet-50 hover:bg-violet-100"
+        className="rounded-md border border-black bg-violet-50 px-4 py-2 text-xl shadow-lg hover:bg-violet-100"
         onClick={() => (session.data ? signOut() : signIn())}
       >
         {session.data ? "Sign out" : "Sign in"}
@@ -75,11 +76,11 @@ const GoalSubmitForm = () => {
         minLength={2}
         maxLength={100}
         onChange={(event) => setMessage(event.target.value)}
-        className="px-4 py-2 border-2 rounded-md border-zinc-800 bg-neutral-900 text-neutral-100 focus:outline-none"
+        className="rounded-md border-2 border-zinc-800 bg-neutral-900 px-4 py-2 text-neutral-100 focus:outline-none"
       />
       <button
         type="submit"
-        className="p-2 border-2 rounded-md border-zinc-800 focus:outline-none"
+        className="rounded-md border-2 border-zinc-800 p-2 focus:outline-none"
       >
         Submit
       </button>
