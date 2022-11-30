@@ -21,13 +21,13 @@ Create a file named `.env` from `.env-example`.
 This file has the connection string to mysql.
 
 ```bash
-DATABASE_URL ='mysql://root:pass@localhost:3306/koal'
+DATABASE_URL='mysql://root:pass@localhost:3306/koal'
 ```
 
 Now install the project dependencies and run migrations on DB:
 
 ```bash
-pnpm install
+pnpm i
 pnpx prisma db push
 ```
 
