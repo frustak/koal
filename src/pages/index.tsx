@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useState } from "react";
+import { Profile } from "../features/auth/profile";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
@@ -13,8 +13,10 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.png" />
       </Head>
 
-      <main className="container flex min-h-screen flex-col items-center justify-center gap-6">
-        <Authentication />
+      <main>
+        <div className="flex justify-end">
+          <Profile />
+        </div>
         <GoalsList />
         <GoalSubmitForm />
       </main>
@@ -23,26 +25,6 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
-const Authentication = () => {
-  const session = useSession();
-
-  return (
-    <div className="flex flex-col items-center justify-center gap-2">
-      {session.data && (
-        <p className="text-2xl text-blue-500">
-          Logged in as {session.data?.user?.name}
-        </p>
-      )}
-      <button
-        className="rounded-md border border-black bg-violet-50 px-4 py-2 text-xl shadow-lg hover:bg-violet-100"
-        onClick={() => (session.data ? signOut() : signIn())}
-      >
-        {session.data ? "Sign out" : "Sign in"}
-      </button>
-    </div>
-  );
-};
 
 const GoalsList = () => {
   const goalsQuery = trpc.todo.getGoals.useQuery();
@@ -62,7 +44,6 @@ const GoalSubmitForm = () => {
 
   return (
     <form
-      className="flex gap-2"
       onSubmit={(event) => {
         event.preventDefault();
         createGoal.mutate({ name: message });
@@ -76,14 +57,8 @@ const GoalSubmitForm = () => {
         minLength={2}
         maxLength={100}
         onChange={(event) => setMessage(event.target.value)}
-        className="rounded-md border-2 border-zinc-800 bg-neutral-900 px-4 py-2 text-neutral-100 focus:outline-none"
       />
-      <button
-        type="submit"
-        className="rounded-md border-2 border-zinc-800 p-2 focus:outline-none"
-      >
-        Submit
-      </button>
+      <button type="submit">Submit</button>
     </form>
   );
 };
