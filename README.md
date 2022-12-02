@@ -2,10 +2,10 @@
 
 Manage your time & energy.
 
-- [Develpment](#develpment)
+- [Development](#develpment)
   - [Running locally](#running-locally)
 
-## Develpment
+## Development
 
 ### Running locally
 
@@ -21,14 +21,14 @@ Create a file named `.env` from `.env-example`.
 This file has the connection string to mysql.
 
 ```bash
-DATABASE_URL ='mysql://root:pass@localhost:3306/koal'
+DATABASE_URL='mysql://root:pass@localhost:3306/koal'
 ```
 
 Now install the project dependencies and run migrations on DB:
 
 ```bash
-pnpm install
-prisma push db
+pnpm i
+pnpx prisma db push
 ```
 
 Then run the project with `pnpm dev`.

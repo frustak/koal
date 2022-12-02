@@ -1,10 +1,10 @@
-import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-
-import { trpc } from "../utils/trpc";
-
+import { type AppType } from "next/app";
+import { AuthChecker } from "../features/auth/auth-checker";
+import { Layout } from "../features/ui/layout";
 import "../styles/globals.css";
+import { trpc } from "../utils/trpc";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -12,7 +12,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <Layout>
+        <AuthChecker>
+          <Component {...pageProps} />
+        </AuthChecker>
+      </Layout>
     </SessionProvider>
   );
 };

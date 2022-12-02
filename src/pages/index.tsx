@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useState } from "react";
+import { Profile } from "../features/auth/profile";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
@@ -12,8 +12,11 @@ const Home: NextPage = () => {
         <meta name="description" content="Time management at it's finest" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <main className="container flex flex-col items-center justify-center min-h-screen gap-6">
-        <AuthShowcase />
+
+      <main>
+        <div className="flex justify-end">
+          <Profile />
+        </div>
         <GoalsList />
         <GoalSubmitForm />
       </main>
@@ -22,26 +25,6 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
-const AuthShowcase = () => {
-  const session = useSession();
-
-  return (
-    <div className="flex flex-col items-center justify-center gap-2">
-      {session.data && (
-        <p className="text-2xl text-blue-500">
-          Logged in as {session.data?.user?.name}
-        </p>
-      )}
-      <button
-        className="px-4 py-2 text-xl border border-black rounded-md shadow-lg bg-violet-50 hover:bg-violet-100"
-        onClick={() => (session.data ? signOut() : signIn())}
-      >
-        {session.data ? "Sign out" : "Sign in"}
-      </button>
-    </div>
-  );
-};
 
 const GoalsList = () => {
   const goalsQuery = trpc.todo.getGoals.useQuery();
@@ -61,7 +44,6 @@ const GoalSubmitForm = () => {
 
   return (
     <form
-      className="flex gap-2"
       onSubmit={(event) => {
         event.preventDefault();
         createGoal.mutate({ name: message });
@@ -75,14 +57,8 @@ const GoalSubmitForm = () => {
         minLength={2}
         maxLength={100}
         onChange={(event) => setMessage(event.target.value)}
-        className="px-4 py-2 border-2 rounded-md border-zinc-800 bg-neutral-900 text-neutral-100 focus:outline-none"
       />
-      <button
-        type="submit"
-        className="p-2 border-2 rounded-md border-zinc-800 focus:outline-none"
-      >
-        Submit
-      </button>
+      <button type="submit">Submit</button>
     </form>
   );
 };
