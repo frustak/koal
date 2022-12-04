@@ -14,6 +14,7 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^5.45.0
   '@typescript-eslint/parser': ^5.45.0
   autoprefixer: ^10.4.13
+  clsx: ^1.2.1
   eslint: 8.29.0
   eslint-config-next: 13.0.6
   next: 13.0.6
@@ -37,6 +38,7 @@ dependencies:
   '@trpc/next': 10.4.3_diwvdd2upbq3oxpk4kmtk7r6my
   '@trpc/react-query': 10.4.3_x72ucuwg27nhluiflrpycjcdya
   '@trpc/server': 10.4.3
+  clsx: 1.2.1
   next: 13.0.6_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.18.0_6jx7hpii6hgsrmhxgqrmo3277u
   react: 18.2.0
@@ -779,6 +781,11 @@ packages:
 
   /client-only/0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
+    dev: false
+
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
     dev: false
 
   /color-convert/2.0.1:
