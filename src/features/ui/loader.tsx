@@ -1,3 +1,18 @@
-export const Loader = () => {
-  return <div className="flex animate-pulse justify-center text-9xl">...</div>;
+import clsx from "clsx";
+import { DotsThree } from "phosphor-react";
+
+export const Loader = ({
+  size = 32,
+  noAnimation,
+}: {
+  size?: number;
+  noAnimation?: boolean;
+}) => {
+  return (
+    <div
+      className={clsx("flex justify-center", !noAnimation && "animate-pulse")}
+    >
+      <DotsThree size={size} weight="duotone" />
+    </div>
+  );
 };
