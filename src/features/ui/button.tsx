@@ -14,3 +14,15 @@ export const Button = (props: ButtonProps) => {
     />
   );
 };
+
+export const IconButton = (props: ButtonProps) => {
+  return (
+    <button
+      {...props}
+      className={clsx(
+        "inline-flex h-6 w-6 items-center justify-center rounded-sm bg-neutral-50 opacity-75 transition hover:bg-neutral-100 hover:opacity-100",
+        props.className
+      )}
+    />
+  );
+};
