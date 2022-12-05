@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { Button } from "../features/ui/button";
+import { Anchor } from "../features/ui/anchor";
 import { Header } from "../features/ui/header";
 
 const Home: NextPage = () => {
@@ -14,7 +14,11 @@ const Home: NextPage = () => {
 
       <main>
         <Header />
-        <Button className="text-lg">New Day</Button>
+        <div className="flex justify-center">
+          <Anchor href="/plan" className="px-6 py-4 text-2xl">
+            New Day
+          </Anchor>
+        </div>
       </main>
     </>
   );
