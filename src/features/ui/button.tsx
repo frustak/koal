@@ -52,6 +52,7 @@ export const IconButton = ({
   children,
   loading,
   className,
+  type = "button",
   ...attrs
 }: IconButtonProps) => {
   return (
@@ -62,6 +63,7 @@ export const IconButton = ({
         className
       )}
       disabled={loading}
+      type={type}
       {...attrs}
     >
       {loading ? <Loader size={20} /> : children}
