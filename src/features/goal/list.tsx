@@ -6,7 +6,11 @@ type Goal = { id: string; name: string };
 
 export const GoalList = ({ goals }: { goals: Goal[] }) => {
   if (goals.length === 0)
-    return <p className="text-xs leading-6">Your goal list is empty!</p>;
+    return (
+      <p className="text-xs leading-6">
+        How can a man lead his life without any goal?
+      </p>
+    );
 
   return (
     <ul className="space-y-3">
