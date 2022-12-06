@@ -15,6 +15,7 @@ export const Button = ({
   loading,
   className,
   variant = "default",
+  type = "button",
   ...attrs
 }: ButtonProps) => {
   const baseClasses =
@@ -36,6 +37,7 @@ export const Button = ({
         className
       )}
       disabled={loading}
+      type={type}
       {...attrs}
     >
       {children}
