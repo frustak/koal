@@ -1,64 +1,56 @@
 import { type NextPage } from "next";
-import Head from "next/head";
 import { useState } from "react";
-import { Profile } from "../features/auth/profile";
+import { GoalForm } from "../features/goal/form";
+import { GoalList } from "../features/goal/list";
+import { Anchor } from "../features/ui/anchor";
+import { Button } from "../features/ui/button";
+import { Loader } from "../features/ui/loader";
+import { Title } from "../features/ui/title";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
   return (
-    <>
-      <Head>
-        <title>Koal</title>
-        <meta name="description" content="Time management at it's finest" />
-        <link rel="icon" href="/favicon.png" />
-      </Head>
+    <main className="grid grow grid-cols-2 divide-x-2 divide-neutral-700">
+      <div className="pr-6 pt-4">
+        <GoalsSection />
+      </div>
 
-      <main>
-        <div className="flex justify-end">
-          <Profile />
-        </div>
-        <GoalsList />
-        <GoalSubmitForm />
-      </main>
-    </>
+      <div className="pt-4">
+        <PlanningSection />
+      </div>
+    </main>
   );
 };
 
-export default Home;
-
-const GoalsList = () => {
+export const GoalsSection = () => {
+  const [isAddingGoal, setIsAddingGoal] = useState(false);
   const goalsQuery = trpc.todo.getGoals.useQuery();
+  const goals = goalsQuery.data?.goals ?? [];
+  const onClickAddGoal = () => setIsAddingGoal(true);
+  const onCreateGoal = () => setIsAddingGoal(false);
 
-  if (goalsQuery.isLoading) return <div> fetching goals </div>;
+  if (goalsQuery.isLoading) return <Loader />;
 
   return (
     <div>
-      Your goals: {goalsQuery.data?.goals.map((goal) => `${goal.name} , `)}
+      <Title>Goals</Title>
+      <GoalList goals={goals} />
+      <div className="mt-6">
+        {isAddingGoal && <GoalForm onSuccess={onCreateGoal} />}
+        {!isAddingGoal && <Button onClick={onClickAddGoal}>Add Goal</Button>}
+      </div>
     </div>
   );
 };
 
-const GoalSubmitForm = () => {
-  const [message, setMessage] = useState("");
-  const createGoal = trpc.todo.createGoal.useMutation();
-
+export const PlanningSection = () => {
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-        createGoal.mutate({ name: message });
-        setMessage("");
-      }}
-    >
-      <input
-        type="text"
-        value={message}
-        placeholder="Goal name"
-        minLength={2}
-        maxLength={100}
-        onChange={(event) => setMessage(event.target.value)}
-      />
-      <button type="submit">Submit</button>
-    </form>
+    <div className="flex items-start justify-center">
+      <Anchor href="/plan" className="px-5 py-3 !text-xl">
+        New Day
+      </Anchor>
+    </div>
   );
 };
+
+export default Home;
