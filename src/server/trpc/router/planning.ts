@@ -39,12 +39,12 @@ export const todoRouter = router({
           })
         ),
         focusTime: z.object({
-          start: z.date(),
-          end: z.date(),
+          start: z.date().optional(),
+          end: z.date().optional(),
         }),
         focusGoal: z.object({
-          name: z.string(),
-          id: z.string(),
+          name: z.string().optional(),
+          id: z.string().optional(),
         }),
       })
     )
@@ -77,12 +77,12 @@ export const todoRouter = router({
           goalName: todo.Goal.name,
         })),
         focusTime: {
-          start: dayFocus?.focusTimeStart ?? new Date(),
-          end: dayFocus?.focusTimeEnd ?? new Date(),
+          start: dayFocus?.focusTimeStart,
+          end: dayFocus?.focusTimeEnd,
         },
         focusGoal: {
-          name: dayFocus?.Goal.name ?? "",
-          id: dayFocus?.Goal.id ?? "",
+          name: dayFocus?.Goal.name,
+          id: dayFocus?.Goal.id,
         },
       };
     }),
