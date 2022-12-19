@@ -19,7 +19,7 @@ export const Button = ({
   ...attrs
 }: ButtonProps) => {
   const baseClasses =
-    "inline-flex items-center justify-center gap-1 border-neutral-700 font-medium transition";
+    "inline-flex items-center justify-center gap-1 border-neutral-700 font-medium";
   const defaultClasses = clsx(
     "rounded-sm border-x-4 border-y px-2 py-1",
     !loading && "hover:bg-neutral-50"
@@ -58,7 +58,7 @@ export const IconButton = ({
   return (
     <button
       className={clsx(
-        "inline-flex h-6 w-6 items-center justify-center rounded-sm bg-neutral-50 opacity-75 transition",
+        "inline-flex h-6 w-6 items-center justify-center rounded-sm bg-neutral-50 opacity-75",
         !loading && "hover:bg-neutral-100 hover:opacity-100",
         className
       )}
