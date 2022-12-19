@@ -5,6 +5,7 @@ module.exports = {
     extend: {},
     fontFamily: {
       display: ["Solway", "serif"],
+      mono: ["'Courier Prime'", "monospace"],
     },
   },
   plugins: [],
