@@ -3,7 +3,7 @@ import { trpc } from "../../utils/trpc";
 import { IconButton } from "../ui/button";
 import { Loader } from "../ui/loader";
 
-type Goal = { id: string; name: string };
+export type Goal = { id: string; name: string };
 
 export const GoalList = () => {
   const goalsQuery = trpc.todo.getGoals.useQuery();
