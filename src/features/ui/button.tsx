@@ -58,8 +58,8 @@ export const IconButton = ({
   return (
     <button
       className={clsx(
-        "inline-flex h-6 w-6 items-center justify-center rounded-sm bg-neutral-50 opacity-75",
-        !loading && "hover:bg-neutral-100 hover:opacity-100",
+        "inline-flex h-6 w-6 items-center justify-center rounded-sm border-2 border-neutral-700 text-neutral-700",
+        !loading && "hover:bg-neutral-100",
         className
       )}
       disabled={loading}
