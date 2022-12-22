@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { router, protectedProcedure } from "../trpc";
 import { prisma } from "../../db/client";
+import { protectedProcedure, router } from "../trpc";
 
 export const todoRouter = router({
   createGoal: protectedProcedure
@@ -154,6 +154,7 @@ export const todoRouter = router({
       z.object({
         todos: z.array(
           z.object({
+            id: z.string(),
             title: z.string(),
             isDone: z.boolean(),
             goalName: z.string(),
@@ -172,6 +173,7 @@ export const todoRouter = router({
 
       return {
         todos: todos.map((todo) => ({
+          id: todo.id,
           title: todo.title,
           isDone: false,
           goalName: todo.Goal.name,
