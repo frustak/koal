@@ -16,7 +16,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <Layout>
         <AuthChecker>
           <Header />
-          <Component {...pageProps} />
+          <div className="flex grow flex-col px-6">
+            <Component {...pageProps} />
+          </div>
         </AuthChecker>
       </Layout>
     </SessionProvider>
