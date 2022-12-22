@@ -23,15 +23,15 @@ const Home: NextPage = () => {
 export const GoalsSection = () => {
   const [isAddingGoal, setIsAddingGoal] = useState(false);
   const onClickAddGoal = () => setIsAddingGoal(true);
-  const onCreateGoal = () => setIsAddingGoal(false);
+  const onAddGoal = () => setIsAddingGoal(false);
 
   return (
     <div>
       <Title>Goals</Title>
       <GoalList />
       <div className="mt-6">
-        {isAddingGoal && <GoalForm onSuccess={onCreateGoal} />}
-        {!isAddingGoal && <Button onClick={onClickAddGoal}>Add Goal</Button>}
+        {isAddingGoal && <GoalForm onSuccess={onAddGoal} />}
+        {!isAddingGoal && <Button onClick={onClickAddGoal}>New Goal</Button>}
       </div>
     </div>
   );
