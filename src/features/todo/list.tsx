@@ -6,7 +6,12 @@ export const TodosList = ({ goalId }: { goalId: string }) => {
   const todos = todosQuery.data?.todos ?? [];
 
   if (todosQuery.isLoading) return <Loader />;
-  if (todos.length === 0) return <p>No todos</p>;
+  if (todos.length === 0)
+    return (
+      <p>
+        Nothing to do but chill <br /> stay frosty ❄️
+      </p>
+    );
 
   return (
     <ul className="list-inside list-disc space-y-3">
