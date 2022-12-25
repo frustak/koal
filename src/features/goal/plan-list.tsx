@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import { Bookmark } from "phosphor-react";
 import { useState } from "react";
+import type { Goal } from "../../server/trpc/router/todo";
 import { trpc } from "../../utils/trpc";
 import { IconButton } from "../ui/button";
-import type { Goal } from "./list";
 
 export const PlanGoalList = ({
   selectedGoalId,

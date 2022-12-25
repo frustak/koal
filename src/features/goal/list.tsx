@@ -1,9 +1,8 @@
 import { Eraser } from "phosphor-react";
+import type { Goal } from "../../server/trpc/router/todo";
 import { trpc } from "../../utils/trpc";
 import { IconButton } from "../ui/button";
 import { Loader } from "../ui/loader";
-
-export type Goal = { id: string; name: string };
 
 export const GoalList = () => {
   const goalsQuery = trpc.todo.getGoals.useQuery();
