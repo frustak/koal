@@ -3,6 +3,13 @@ import { z } from "zod";
 import { prisma } from "../../db/client";
 import { protectedProcedure, router } from "../trpc";
 
+const goalSchema = z.object({
+  name: z.string(),
+  id: z.string(),
+});
+
+export type Goal = z.infer<typeof goalSchema>;
+
 export const todoRouter = router({
   createGoal: protectedProcedure
     .input(
@@ -52,7 +59,7 @@ export const todoRouter = router({
   getGoals: protectedProcedure
     .output(
       z.object({
-        goals: z.array(z.object({ name: z.string(), id: z.string() })),
+        goals: z.array(goalSchema),
       })
     )
     .query(async ({ ctx }) => {
