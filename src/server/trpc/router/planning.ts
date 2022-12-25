@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-import { router, protectedProcedure } from "../trpc";
 import { prisma } from "../../db/client";
+import { protectedProcedure, router } from "../trpc";
 
-export const todoRouter = router({
+export const planningRouter = router({
   setDayFocus: protectedProcedure
     .input(
       z.object({

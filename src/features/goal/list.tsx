@@ -1,16 +1,22 @@
 import { Eraser } from "phosphor-react";
+import type { Goal } from "../../server/trpc/router/todo";
 import { trpc } from "../../utils/trpc";
 import { IconButton } from "../ui/button";
+import { Loader } from "../ui/loader";
 
-type Goal = { id: string; name: string };
+export const GoalList = () => {
+  const goalsQuery = trpc.todo.getGoals.useQuery();
+  const goals = goalsQuery.data?.goals ?? [];
 
-export const GoalList = ({ goals }: { goals: Goal[] }) => {
-  if (goals.length === 0)
+  if (goalsQuery.isLoading) return <Loader />;
+
+  if (goals.length === 0) {
     return (
       <p className="text-xs leading-6">
         How can a man lead his life without any goal?
       </p>
     );
+  }
 
   return (
     <ul className="space-y-3">

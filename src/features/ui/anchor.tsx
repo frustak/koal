@@ -13,7 +13,7 @@ export const Anchor = ({ children, href, className }: AnchorProps) => {
     <Link
       href={href}
       className={clsx(
-        "inline-flex rounded-sm bg-neutral-700 p-1 text-xs font-medium text-white transition hover:-rotate-3",
+        "inline-flex rounded-sm bg-neutral-700 p-1 text-xs font-medium text-white hover:-rotate-3",
         className
       )}
     >
