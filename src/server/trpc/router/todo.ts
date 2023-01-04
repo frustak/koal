@@ -10,6 +10,15 @@ const goalSchema = z.object({
 
 export type Goal = z.infer<typeof goalSchema>;
 
+const todoSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  isDone: z.date().nullable(),
+  goalName: z.string(),
+});
+
+export type Todo = z.infer<typeof todoSchema>;
+
 export const todoRouter = router({
   createGoal: protectedProcedure
     .input(
@@ -144,7 +153,7 @@ export const todoRouter = router({
     .mutation(async ({ input }) => {
       await prisma.todo.update({
         data: {
-          isDone: new Date(),
+          isDone: input.isDone ? new Date() : null,
         },
         where: {
           id: input.id,
@@ -159,14 +168,7 @@ export const todoRouter = router({
     )
     .output(
       z.object({
-        todos: z.array(
-          z.object({
-            id: z.string(),
-            title: z.string(),
-            isDone: z.boolean(),
-            goalName: z.string(),
-          })
-        ),
+        todos: z.array(todoSchema),
       })
     )
     .query(async ({ input, ctx }) => {
@@ -182,7 +184,7 @@ export const todoRouter = router({
         todos: todos.map((todo) => ({
           id: todo.id,
           title: todo.title,
-          isDone: false,
+          isDone: todo.isDone,
           goalName: todo.Goal.name,
         })),
       };
@@ -194,7 +196,7 @@ export const todoRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      prisma.todo.delete({
+      await prisma.todo.delete({
         where: { id: input.todoId },
       });
     }),
