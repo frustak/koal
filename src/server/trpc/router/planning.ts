@@ -1,5 +1,4 @@
 import { z } from "zod";
-
 import { prisma } from "../../db/client";
 import { protectedProcedure, router } from "../trpc";
 
@@ -11,11 +10,11 @@ export const planningRouter = router({
         focusTimeStart: z
           .date()
           .min(new Date(new Date().setHours(0, 0, 0, 0)))
-          .max(new Date(new Date().setHours(11, 59, 59, 0))),
+          .max(new Date(new Date().setHours(23, 59, 59, 0))),
         focusTimeEnd: z
           .date()
           .min(new Date(new Date().setHours(0, 0, 0, 0)))
-          .max(new Date(new Date().setHours(11, 59, 59, 0))),
+          .max(new Date(new Date().setHours(23, 59, 59, 0))),
       })
     )
     .mutation(async ({ ctx, input }) => {
