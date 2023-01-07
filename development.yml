@@ -16,3 +16,10 @@ services:
     restart: always
     ports:
       - 8080:8080
+
+  koal:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
