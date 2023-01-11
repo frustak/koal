@@ -35,7 +35,7 @@ model Goal {
 model DayFocus {
   // What is important for the day?
   id             String    @id @default(cuid())
-  date           DateTime  @default(now())
+  date           DateTime
   ownerId        String
   goalId         String
   focusTimeStart DateTime
@@ -43,6 +43,7 @@ model DayFocus {
 
   User User @relation(fields: [ownerId], references: [id])
   Goal Goal @relation(fields: [goalId], references: [id])
+  @@unique([ownerId, date])
 }
 
 // Necessary for Next auth
