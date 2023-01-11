@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { prisma } from "../../db/client";
 import { protectedProcedure, router } from "../trpc";
+import { Todo, todoSchema } from "./todo";
 
 export const planningRouter = router({
     setDayFocus: protectedProcedure
@@ -18,26 +19,31 @@ export const planningRouter = router({
             })
         )
         .mutation(async ({ ctx, input }) => {
-            await prisma.dayFocus.create({
-                data: {
+            await prisma.dayFocus.upsert({
+                where: {
+                    ownerId_date: {
+                        ownerId: ctx.session.user.id,
+                        date: new Date(new Date().setHours(0, 0, 0, 0)),
+                    },
+                },
+                update: {
+                    goalId: input.goalId,
+                    focusTimeStart: input.focusTimeStart,
+                    focusTimeEnd: input.focusTimeEnd,
+                },
+                create: {
                     goalId: input.goalId,
                     ownerId: ctx.session.user.id,
                     focusTimeStart: input.focusTimeStart,
                     focusTimeEnd: input.focusTimeEnd,
+                    date: new Date(new Date().setHours(0, 0, 0, 0)),
                 },
             });
         }),
     inbox: protectedProcedure
         .output(
             z.object({
-                todos: z.array(
-                    z.object({
-                        id: z.string(),
-                        title: z.string(),
-                        isDone: z.date().nullable(),
-                        goalName: z.string(),
-                    })
-                ),
+                goalToTodos: z.record(z.string(), z.array(todoSchema)),
                 focusTime: z.object({
                     start: z.date().optional(),
                     end: z.date().optional(),
@@ -64,13 +70,24 @@ export const planningRouter = router({
                 include: { Goal: true },
             });
 
-            return {
-                todos: todos.map((todo) => ({
+            const todoGroupedByGoal = {} as Record<string, Todo[]>;
+
+            todos.map((todo) => {
+                const transformedTodo = {
                     id: todo.id,
                     title: todo.title,
                     isDone: todo.isDone,
                     goalName: todo.Goal.name,
-                })),
+                };
+                if (todoGroupedByGoal[todo.Goal.name]) {
+                    todoGroupedByGoal[todo.Goal.name]?.push(transformedTodo);
+                } else {
+                    todoGroupedByGoal[todo.Goal.name] = [transformedTodo];
+                }
+            });
+
+            return {
+                goalToTodos: todoGroupedByGoal,
                 focusTime: {
                     start: dayFocus?.focusTimeStart,
                     end: dayFocus?.focusTimeEnd,

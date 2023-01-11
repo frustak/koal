@@ -44,7 +44,7 @@ export const PlanningSection = () => {
                 New Day
             </Anchor>
             <Anchor href="/day-view" className="px-5 py-3 !text-xl">
-                Day View
+                View Day
             </Anchor>
         </div>
     );
