@@ -10,7 +10,7 @@ type CreateContextOptions = {
 };
 
 /** Use this helper for:
- * - testing, so we dont have to mock Next.js' req/res
+ * - testing, so we don't have to mock Next.js' req/res
  * - trpc's `createSSGHelpers` where we don't have req/res
  * @see https://create.t3.gg/en/usage/trpc#-servertrpccontextts
  **/
