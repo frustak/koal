@@ -4,9 +4,9 @@ import { planningRouter } from "./planning";
 import { todoRouter } from "./todo";
 
 export const appRouter = router({
-  auth: authRouter,
-  todo: todoRouter,
-  planning: planningRouter,
+    auth: authRouter,
+    todo: todoRouter,
+    planning: planningRouter,
 });
 
 // export type definition of API

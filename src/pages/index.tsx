@@ -31,7 +31,9 @@ export const GoalsSection = () => {
             <GoalList />
             <div className="mt-6">
                 {isAddingGoal && <GoalForm onSuccess={onAddGoal} />}
-                {!isAddingGoal && <Button onClick={onClickAddGoal}>New Goal</Button>}
+                {!isAddingGoal && (
+                    <Button onClick={onClickAddGoal}>New Goal</Button>
+                )}
             </div>
         </div>
     );
