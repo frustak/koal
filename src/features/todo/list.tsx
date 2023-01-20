@@ -11,7 +11,9 @@ export const TodosList = ({ goalId }: { goalId: string }) => {
 
     if (todosQuery.isLoading) return <Loader />;
     if (todos.length === 0)
-        return <p className="text-xs">Nothing to do but chill, stay frosty ❄️</p>;
+        return (
+            <p className="text-xs">Nothing to do but chill, stay frosty ❄️</p>
+        );
 
     return (
         <ul className="space-y-3">
@@ -36,10 +38,15 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
     return (
         <li className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-                <IconButton onClick={toggleDone} loading={updateMutation.isLoading}>
+                <IconButton
+                    onClick={toggleDone}
+                    loading={updateMutation.isLoading}
+                >
                     {isDone && <Check weight="duotone" />}
                 </IconButton>
-                <span className={clsx(isDone && "line-through")}>{todo.title}</span>
+                <span className={clsx(isDone && "line-through")}>
+                    {todo.title}
+                </span>
             </div>
             <IconButton onClick={deleteTodo} loading={deleteMutation.isLoading}>
                 <Eraser weight="duotone" />

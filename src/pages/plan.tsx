@@ -79,8 +79,12 @@ const TodosSection = ({ goalId }: { goalId: string | null }) => {
             {goalId && <TodosList goalId={goalId} />}
             {goalId && (
                 <div className="mt-6">
-                    {isAddingTodo && <TodoForm goalId={goalId} onSuccess={onAddTodo} />}
-                    {!isAddingTodo && <Button onClick={onClickAddTodo}>Add Todo</Button>}
+                    {isAddingTodo && (
+                        <TodoForm goalId={goalId} onSuccess={onAddTodo} />
+                    )}
+                    {!isAddingTodo && (
+                        <Button onClick={onClickAddTodo}>Add Todo</Button>
+                    )}
                 </div>
             )}
         </div>
@@ -91,7 +95,10 @@ const FocusTimeSection = ({
     onFinish,
     submitting,
 }: {
-    onFinish: (focusTime: { start: TimeInputValue; end: TimeInputValue }) => void;
+    onFinish: (focusTime: {
+        start: TimeInputValue;
+        end: TimeInputValue;
+    }) => void;
     submitting: boolean;
 }) => {
     const [start, setStart] = useState<TimeInputValue>({
@@ -131,7 +138,8 @@ const TimeInput = ({
     onChange: (value: TimeInputValue) => void;
 }) => {
     const setHour = (hour: string) => onChange({ hour, minute: value.minute });
-    const setMinute = (minute: string) => onChange({ hour: value.hour, minute });
+    const setMinute = (minute: string) =>
+        onChange({ hour: value.hour, minute });
 
     return (
         <div className="flex items-center justify-center p-1">

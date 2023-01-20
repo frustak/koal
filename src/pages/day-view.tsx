@@ -6,28 +6,30 @@ import { trpc } from "../utils/trpc";
 import _ from "lodash";
 
 const DayViewPage: NextPage = () => {
-  const inboxQuery = trpc.planning.inbox.useQuery();
-  const goalToTodos = inboxQuery.data?.goalToTodos ?? [];
-  const focusGoal = inboxQuery.data?.focusGoal.name;
+    const inboxQuery = trpc.planning.inbox.useQuery();
+    const goalToTodos = inboxQuery.data?.goalToTodos ?? [];
+    const focusGoal = inboxQuery.data?.focusGoal.name;
 
-  if (inboxQuery.isLoading) return <Loader />;
-  if (goalToTodos.length === 0)
-    return <Title>Awesome you are done for today. Come back tomorrow</Title>;
+    if (inboxQuery.isLoading) return <Loader />;
+    if (goalToTodos.length === 0)
+        return (
+            <Title>Awesome you are done for today. Come back tomorrow</Title>
+        );
 
-  return (
-    <main className="flex grow flex-col">
-      {_.toPairs(goalToTodos).map(([goal, todos]) => (
-        <div key={goal}>
-          <Title>{goal == focusGoal ? `Focus ${goal}` : goal}</Title>
-          <ul>
-            {todos.map((todo) => (
-              <TodoItem key={todo.id} todo={todo} />
+    return (
+        <main className="flex grow flex-col">
+            {_.toPairs(goalToTodos).map(([goal, todos]) => (
+                <div key={goal}>
+                    <Title>{goal == focusGoal ? `Focus ${goal}` : goal}</Title>
+                    <ul>
+                        {todos.map((todo) => (
+                            <TodoItem key={todo.id} todo={todo} />
+                        ))}
+                    </ul>
+                </div>
             ))}
-          </ul>
-        </div>
-      ))}
-    </main>
-  );
+        </main>
+    );
 };
 
 export default DayViewPage;
