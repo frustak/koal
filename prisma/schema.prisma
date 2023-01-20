@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider             = "mysql"
+  provider             = "sqlite"
   url                  = env("DATABASE_URL")
   referentialIntegrity = "prisma"
 }
@@ -13,8 +13,8 @@ model Todo {
   id          String    @id @default(cuid())
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  title       String    @db.VarChar(150)
-  description String?   @db.VarChar(300)
+  title       String
+  description String?
   isDone      DateTime?
   goalId      String
 
@@ -25,7 +25,7 @@ model Goal {
   id        String     @id @default(cuid())
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  name      String     @db.VarChar(150)
+  name      String
   ownerId   String
   User      User       @relation(fields: [ownerId], references: [id])
   Todo      Todo[]
@@ -34,7 +34,7 @@ model Goal {
 
 model DayFocus {
   // What is important for the day?
-  id             String    @id @default(cuid())
+  id             String   @id @default(cuid())
   date           DateTime
   ownerId        String
   goalId         String
@@ -43,6 +43,7 @@ model DayFocus {
 
   User User @relation(fields: [ownerId], references: [id])
   Goal Goal @relation(fields: [goalId], references: [id])
+
   @@unique([ownerId, date])
 }
 
@@ -53,12 +54,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.VarChar(191)
-  access_token      String? @db.VarChar(191)
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.VarChar(191)
+  id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
