@@ -7,7 +7,7 @@
         "dev": "next dev",
         "postinstall": "prisma generate",
         "lint": "next lint",
-        "start": "next start",
+        "start": "prisma db push && next start"
         "fmt": "prettier --write ."
     },
     "dependencies": {
