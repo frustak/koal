@@ -41,8 +41,8 @@ model DayFocus {
   focusTimeStart DateTime
   focusTimeEnd   DateTime
 
-  User User @relation(fields: [ownerId], references: [id])
-  Goal Goal @relation(fields: [goalId], references: [id])
+  User User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  Goal Goal @relation(fields: [goalId], references: [id], onDelete: Cascade)
 
   @@unique([ownerId, date])
 }

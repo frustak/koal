@@ -41,7 +41,7 @@ export const GoalsSection = () => {
 
 export const PlanningSection = () => {
     return (
-        <div className="flex items-start justify-center">
+        <div className="flex items-start justify-center gap-6">
             <Anchor href="/plan" className="px-5 py-3 !text-xl">
                 New Day
             </Anchor>
