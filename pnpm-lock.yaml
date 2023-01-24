@@ -17,6 +17,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.49.0
   autoprefixer: ^10.4.13
   clsx: ^1.2.1
+  date-fns: ^2.29.3
   eslint: 8.32.0
   eslint-config-next: 13.1.5
   lodash: ^4.17.21
@@ -45,6 +46,7 @@ dependencies:
   '@trpc/react-query': 10.9.0_22wgxldzdfxutowffn2dykkd3i
   '@trpc/server': 10.9.0
   clsx: 1.2.1
+  date-fns: 2.29.3
   lodash: 4.17.21
   next: 13.1.5_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.18.10_s6zlkfvllybxhmcq5pkr2zsuza
@@ -864,6 +866,11 @@ packages:
   /damerau-levenshtein/1.0.8:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
     dev: true
+
+  /date-fns/2.29.3:
+    resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
+    engines: {node: '>=0.11'}
+    dev: false
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
