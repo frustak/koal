@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { prisma } from "../../db/client";
 import { protectedProcedure, router } from "../trpc";
-import { Todo, todoSchema } from "./todo";
+import type { Todo } from "./todo";
+import { todoSchema } from "./todo";
 
 export const planningRouter = router({
     setDayFocus: protectedProcedure
@@ -70,7 +71,7 @@ export const planningRouter = router({
                 include: { Goal: true },
             });
 
-            const todoGroupedByGoal = {} as Record<string, Todo[]>;
+            const todoGroupedByGoal: Record<string, Todo[]> = {};
 
             todos.map((todo) => {
                 const transformedTodo = {
