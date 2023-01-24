@@ -74,9 +74,8 @@ export const todoRouter = router({
             const goals = await prisma.goal.findMany({
                 where: { ownerId: ctx.session.user.id },
             });
-
             return {
-                goals: goals,
+                goals,
             };
         }),
     deleteGoal: protectedProcedure
@@ -178,7 +177,6 @@ export const todoRouter = router({
                 },
                 include: { Goal: true },
             });
-
             return {
                 todos: todos.map((todo) => ({
                     id: todo.id,
