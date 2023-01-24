@@ -60,6 +60,7 @@ export const planningRouter = router({
                 where: {
                     isDone: null,
                     Goal: { ownerId: ctx.session.user.id },
+                    priority: "urgent",
                 },
                 include: { Goal: true },
             });

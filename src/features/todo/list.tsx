@@ -6,7 +6,10 @@ import { IconButton } from "../ui/button";
 import { Loader } from "../ui/loader";
 
 export const TodosList = ({ goalId }: { goalId: string }) => {
-    const todosQuery = trpc.todo.getTodos.useQuery({ goalIds: [goalId] });
+    const todosQuery = trpc.todo.getTodos.useQuery({
+        goalIds: [goalId],
+        priority: "urgent",
+    });
     const todos = todosQuery.data?.todos ?? [];
 
     if (todosQuery.isLoading) return <Loader />;

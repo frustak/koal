@@ -12,6 +12,7 @@ export type Goal = z.infer<typeof goalSchema>;
 export const todoSchema = z.object({
     id: z.string(),
     title: z.string(),
+    description: z.string().nullish(),
     isDone: z.date().nullable(),
     goalName: z.string(),
 });
@@ -95,24 +96,29 @@ export const todoRouter = router({
                 title: z.string(),
                 description: z.string().nullable(),
                 goalId: z.string(),
+                priority: z.enum(["not_urgent", "urgent"]),
             })
         )
-        .output(
-            z.object({
-                id: z.string(),
-                title: z.string(),
-                description: z.string().nullish(),
-            })
-        )
+        .output(todoSchema)
         .mutation(async ({ input }) => {
             const createdTodo = await prisma.todo.create({
                 data: {
                     title: input.title,
                     description: input.description,
                     goalId: input.goalId,
+                    priority: input.priority,
+                },
+                include: {
+                    Goal: true,
                 },
             });
-            return createdTodo;
+            const response: Todo = {
+                id: createdTodo.id,
+                title: createdTodo.title,
+                isDone: createdTodo.isDone,
+                goalName: createdTodo.Goal.name,
+            };
+            return response;
         }),
     updateTodo: protectedProcedure
         .input(
@@ -120,15 +126,10 @@ export const todoRouter = router({
                 id: z.string(),
                 title: z.string().optional(),
                 description: z.string().optional(),
+                priority: z.enum(["not_urgent", "urgent"]).optional(),
             })
         )
-        .output(
-            z.object({
-                id: z.string(),
-                title: z.string(),
-                description: z.string().nullish(),
-            })
-        )
+        .output(todoSchema)
         .mutation(async ({ input }) => {
             const updatedTodo = await prisma.todo.update({
                 data: {
@@ -138,8 +139,17 @@ export const todoRouter = router({
                 where: {
                     id: input.id,
                 },
+                include: {
+                    Goal: true,
+                },
             });
-            return updatedTodo;
+            const response: Todo = {
+                id: updatedTodo.id,
+                title: updatedTodo.title,
+                isDone: updatedTodo.isDone,
+                goalName: updatedTodo.Goal.name,
+            };
+            return response;
         }),
     updateTodoStatus: protectedProcedure
         .input(
@@ -162,6 +172,7 @@ export const todoRouter = router({
         .input(
             z.object({
                 goalIds: z.array(z.string()).default([]),
+                priority: z.enum(["not_urgent", "urgent"]),
             })
         )
         .output(
@@ -174,6 +185,7 @@ export const todoRouter = router({
                 where: {
                     goalId: { in: input.goalIds },
                     Goal: { ownerId: ctx.session.user.id },
+                    priority: input.priority,
                 },
                 include: { Goal: true },
             });

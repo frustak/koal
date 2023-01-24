@@ -1,95 +1,96 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
+    provider        = "prisma-client-js"
+    previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider             = "sqlite"
-  url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+    provider             = "sqlite"
+    url                  = env("DATABASE_URL")
+    referentialIntegrity = "prisma"
 }
 
 model Todo {
-  id          String    @id @default(cuid())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  title       String
-  description String?
-  isDone      DateTime?
-  goalId      String
+    id          String    @id @default(cuid())
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    title       String
+    description String?
+    isDone      DateTime?
+    priority    String    @default("urgent")
+    goalId      String
 
-  Goal Goal @relation(fields: [goalId], references: [id])
+    Goal Goal @relation(fields: [goalId], references: [id])
 }
 
 model Goal {
-  id        String     @id @default(cuid())
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  name      String
-  ownerId   String
-  User      User       @relation(fields: [ownerId], references: [id])
-  Todo      Todo[]
-  DayFocus  DayFocus[]
+    id        String     @id @default(cuid())
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+    name      String
+    ownerId   String
+    User      User       @relation(fields: [ownerId], references: [id])
+    Todo      Todo[]
+    DayFocus  DayFocus[]
 }
 
 model DayFocus {
-  // What is important for the day?
-  id             String   @id @default(cuid())
-  date           DateTime
-  ownerId        String
-  goalId         String
-  focusTimeStart DateTime
-  focusTimeEnd   DateTime
+    // What is important for the day?
+    id             String   @id @default(cuid())
+    date           DateTime
+    ownerId        String
+    goalId         String
+    focusTimeStart DateTime
+    focusTimeEnd   DateTime
 
-  User User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  Goal Goal @relation(fields: [goalId], references: [id], onDelete: Cascade)
+    User User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    Goal Goal @relation(fields: [goalId], references: [id], onDelete: Cascade)
 
-  @@unique([ownerId, date])
+    @@unique([ownerId, date])
 }
 
 // Necessary for Next auth
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id                String  @id @default(cuid())
+    userId            String
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String?
+    access_token      String?
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String?
+    session_state     String?
+    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([provider, providerAccountId])
+    @@unique([provider, providerAccountId])
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id            String     @id @default(cuid())
-  name          String?
-  email         String?    @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  goals         Goal[]
-  DayFocus      DayFocus[]
+    id            String     @id @default(cuid())
+    name          String?
+    email         String?    @unique
+    emailVerified DateTime?
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+    goals         Goal[]
+    DayFocus      DayFocus[]
 }
 
 model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
+    identifier String
+    token      String   @unique
+    expires    DateTime
 
-  @@unique([identifier, token])
+    @@unique([identifier, token])
 }
