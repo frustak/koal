@@ -183,9 +183,11 @@ export const todoRouter = router({
         .query(async ({ input, ctx }) => {
             const todos = await prisma.todo.findMany({
                 where: {
-                    goalId: { in: input.goalIds },
                     Goal: { ownerId: ctx.session.user.id },
                     priority: input.priority,
+                    ...(input.goalIds.length > 1
+                        ? { goalId: { in: input.goalIds } }
+                        : {}),
                 },
                 include: { Goal: true },
             });
