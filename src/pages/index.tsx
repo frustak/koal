@@ -48,6 +48,9 @@ export const PlanningSection = () => {
             <Anchor href="/day-view" className="px-5 py-3 !text-xl">
                 View Day
             </Anchor>
+            <Anchor href="/someday" className="px-5 py-3 !text-xl">
+                Someday Todo List
+            </Anchor>
         </div>
     );
 };
