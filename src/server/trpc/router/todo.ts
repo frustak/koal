@@ -185,7 +185,7 @@ export const todoRouter = router({
                 where: {
                     Goal: { ownerId: ctx.session.user.id },
                     priority: input.priority,
-                    ...(input.goalIds.length > 1
+                    ...(input.goalIds.length > 0
                         ? { goalId: { in: input.goalIds } }
                         : {}),
                 },

@@ -5,7 +5,7 @@ import subprocess
 argparser = argparse.ArgumentParser()
 argparser.add_argument("--env-file", required=True)
 
-args = argparser.parse_args()
+args, unknown = argparser.parse_known_args()
 
 
 def get_secrets_from_env_file(env_file):
@@ -17,7 +17,7 @@ def get_secrets_from_env_file(env_file):
 
     kv_pairs = {}
 
-    with open(args.env_file) as f:
+    with open(env_file) as f:
         for line in f:
             line = line.strip()
             if not line or line.startswith("#"):
@@ -42,8 +42,13 @@ def fly_deploy(secrets):
         build_secrets.extend(["--build-secret", f"{key}={value}"])
         print(f"Set secret {key}")
 
-    command = ["flyctl", "deploy"]
+    command = [
+        "flyctl",
+        "deploy",
+    ]
+    command.extend(unknown)
     command.extend(build_secrets)
+    print(f"Running command: {command}")
     subprocess.run(command)
 
 
