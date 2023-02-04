@@ -101,13 +101,21 @@ const FocusTimeSection = ({
     }) => void;
     submitting: boolean;
 }) => {
+    const inboxQuery = trpc.planning.inbox.useQuery();
+    const focusTime = inboxQuery.data?.focusTime;
+
+    const startHour = focusTime?.start?.getHours() ?? 13;
+    const startMinute = focusTime?.start?.getMinutes() ?? 0;
+    const endHour = focusTime?.end?.getHours() ?? 14;
+    const endMinute = focusTime?.end?.getMinutes() ?? 0;
+
     const [start, setStart] = useState<TimeInputValue>({
-        hour: "13",
-        minute: "00",
+        hour: startHour.toString().padStart(2, "0"),
+        minute: startMinute.toString().padStart(2, "0"),
     });
     const [end, setEnd] = useState<TimeInputValue>({
-        hour: "14",
-        minute: "00",
+        hour: endHour.toString().padStart(2, "0"),
+        minute: endMinute.toString().padStart(2, "0"),
     });
 
     return (

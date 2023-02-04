@@ -1,3 +1,5 @@
+import { TRPCError } from "@trpc/server";
+import { isAfter, isBefore } from "date-fns";
 import { z } from "zod";
 import { prisma } from "../../db/client";
 import { protectedProcedure, router } from "../trpc";
@@ -9,17 +11,28 @@ export const planningRouter = router({
         .input(
             z.object({
                 goalId: z.string(),
-                focusTimeStart: z
-                    .date()
-                    .min(new Date(new Date().setHours(0, 0, 0, 0)))
-                    .max(new Date(new Date().setHours(23, 59, 59, 0))),
-                focusTimeEnd: z
-                    .date()
-                    .min(new Date(new Date().setHours(0, 0, 0, 0)))
-                    .max(new Date(new Date().setHours(23, 59, 59, 0))),
+                focusTimeStart: z.date(),
+                focusTimeEnd: z.date(),
             })
         )
         .mutation(async ({ ctx, input }) => {
+            if (
+                new Date(input.focusTimeStart).getDate() !==
+                new Date().getDate() ||
+                new Date(input.focusTimeEnd).getDate() !== new Date().getDate()
+            ) {
+                throw new TRPCError({
+                    code: "BAD_REQUEST",
+                    message: "Focus time must be today",
+                });
+            }
+
+            if (isBefore(input.focusTimeEnd, input.focusTimeStart)) {
+                throw new TRPCError({
+                    code: "BAD_REQUEST",
+                    message: "Focus time start must be before focus time end",
+                });
+            }
             await prisma.dayFocus.upsert({
                 where: {
                     ownerId_date: {
