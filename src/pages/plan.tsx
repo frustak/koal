@@ -8,8 +8,14 @@ import { Button } from "../features/ui/button";
 import { Title } from "../features/ui/title";
 import { trpc } from "../utils/trpc";
 
+interface Goal {
+    id: string;
+    name: string;
+}
+
 const PlanPage: NextPage = () => {
     const [selectedGoalId, setSelectedGoalId] = useState<string | null>(null);
+    const [focusedGoal, setFocusedGoal] = useState<Goal | null>(null);
     const focusMutation = trpc.planning.setDayFocus.useMutation();
 
     return (
@@ -17,6 +23,8 @@ const PlanPage: NextPage = () => {
             <GoalsSection
                 selectedGoalId={selectedGoalId}
                 setSelectedGoalId={setSelectedGoalId}
+                focusedGoal={focusedGoal}
+                setFocusedGoal={setFocusedGoal}
             />
             <hr className="mt-10 rounded-sm border-t-2 border-neutral-700" />
             <div className="grid grow grid-cols-2 divide-x-2 divide-neutral-700">
@@ -32,14 +40,15 @@ const PlanPage: NextPage = () => {
                             const endDate = new Date();
                             endDate.setHours(_.parseInt(time.end.hour));
                             endDate.setMinutes(_.parseInt(time.end.minute));
-                            if (selectedGoalId)
+                            if (focusedGoal)
                                 focusMutation.mutate({
-                                    goalId: selectedGoalId,
+                                    goalId: focusedGoal.id,
                                     focusTimeStart: startDate,
                                     focusTimeEnd: endDate,
                                 });
                         }}
                         submitting={focusMutation.isLoading}
+                        focusedGoal={focusedGoal}
                     />
                 </div>
             </div>
@@ -52,9 +61,13 @@ export default PlanPage;
 const GoalsSection = ({
     selectedGoalId,
     setSelectedGoalId,
+    focusedGoal,
+    setFocusedGoal,
 }: {
     selectedGoalId: string | null;
     setSelectedGoalId: (value: string | null) => void;
+    focusedGoal: Goal | null;
+    setFocusedGoal: (value: Goal | null) => void;
 }) => {
     return (
         <div>
@@ -62,6 +75,8 @@ const GoalsSection = ({
             <PlanGoalList
                 selectedGoalId={selectedGoalId}
                 setSelectedGoalId={setSelectedGoalId}
+                focusedGoal={focusedGoal}
+                setFocusedGoal={setFocusedGoal}
             />
         </div>
     );
@@ -94,12 +109,14 @@ const TodosSection = ({ goalId }: { goalId: string | null }) => {
 const FocusTimeSection = ({
     onFinish,
     submitting,
+    focusedGoal,
 }: {
     onFinish: (focusTime: {
         start: TimeInputValue;
         end: TimeInputValue;
     }) => void;
     submitting: boolean;
+    focusedGoal: Goal | null;
 }) => {
     const inboxQuery = trpc.planning.inbox.useQuery();
     const focusTime = inboxQuery.data?.focusTime;
@@ -118,6 +135,23 @@ const FocusTimeSection = ({
         minute: endMinute.toString().padStart(2, "0"),
     });
 
+    let focusedGoalText = (
+        <div>
+            No goal is selected to focus on. Select a goal to focus on it in
+            this time.
+        </div>
+    );
+    if (focusedGoal) {
+        focusedGoalText = (
+            <div>
+                You're going to focus on
+                <span className="ml-1  font-bold">
+                    {focusedGoal?.name} &nbsp;
+                </span>
+                at this time.
+            </div>
+        );
+    }
     return (
         <div className="flex flex-col items-center">
             <Title>Focus time</Title>
@@ -125,6 +159,7 @@ const FocusTimeSection = ({
                 <TimeInput value={start} onChange={setStart} />
                 <TimeInput value={end} onChange={setEnd} />
             </div>
+            <div className="mt-6 text-lg">{focusedGoalText}</div>
             <Button
                 className="mt-20 px-10 text-lg"
                 onClick={() => onFinish({ start, end })}
