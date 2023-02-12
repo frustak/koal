@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import { Bookmark } from "phosphor-react";
-import { useState } from "react";
 import type { Goal } from "../../server/trpc/router/todo";
 import { trpc } from "../../utils/trpc";
 import { IconButton } from "../ui/button";
@@ -8,11 +7,14 @@ import { IconButton } from "../ui/button";
 export const PlanGoalList = ({
     selectedGoalId,
     setSelectedGoalId,
+    focusedGoal,
+    setFocusedGoal,
 }: {
     selectedGoalId: string | null;
     setSelectedGoalId: (value: string | null) => void;
+    focusedGoal: Goal | null;
+    setFocusedGoal: (value: Goal | null) => void;
 }) => {
-    const [focusedGoalId, setFocusedGoalId] = useState<string | null>(null);
     const goalsQuery = trpc.todo.getGoals.useQuery();
     const goals = goalsQuery.data?.goals ?? [];
 
@@ -23,15 +25,20 @@ export const PlanGoalList = ({
                     key={goal.id}
                     goal={goal}
                     selected={selectedGoalId === goal.id}
-                    focused={focusedGoalId === goal.id}
+                    focused={focusedGoal?.id === goal.id}
                     onClick={() =>
                         setSelectedGoalId(
                             goal.id === selectedGoalId ? null : goal.id
                         )
                     }
                     onClickFocus={() =>
-                        setFocusedGoalId(
-                            goal.id === focusedGoalId ? null : goal.id
+                        setFocusedGoal(
+                            goal.id === focusedGoal?.id
+                                ? null
+                                : {
+                                      id: goal.id,
+                                      name: goal.name,
+                                  }
                         )
                     }
                 />
