@@ -144,7 +144,7 @@ const FocusTimeSection = ({
     if (focusedGoal) {
         focusedGoalText = (
             <div>
-                You're going to focus on
+                You&apos;re going to focus on
                 <span className="ml-1  font-bold">
                     {focusedGoal?.name} &nbsp;
                 </span>
