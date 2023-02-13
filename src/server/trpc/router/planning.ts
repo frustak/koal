@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { isAfter, isBefore } from "date-fns";
+import { isBefore } from "date-fns";
 import { z } from "zod";
 import { prisma } from "../../db/client";
 import { protectedProcedure, router } from "../trpc";
@@ -18,7 +18,7 @@ export const planningRouter = router({
         .mutation(async ({ ctx, input }) => {
             if (
                 new Date(input.focusTimeStart).getDate() !==
-                new Date().getDate() ||
+                    new Date().getDate() ||
                 new Date(input.focusTimeEnd).getDate() !== new Date().getDate()
             ) {
                 throw new TRPCError({
