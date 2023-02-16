@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Eraser } from "phosphor-react";
 import type { Goal } from "../../server/trpc/router/todo";
 import { trpc } from "../../utils/trpc";
@@ -33,7 +34,12 @@ const GoalItem = ({ goal }: { goal: Goal }) => {
 
     return (
         <li className="flex items-center justify-between">
-            <p>{goal.name}</p>
+            <Link
+                href={`/goal/${goal.id}`}
+                className="rounded-sm hover:bg-neutral-50"
+            >
+                {goal.name}
+            </Link>
             <IconButton
                 onClick={handleDelete}
                 loading={deleteGoalMutation.isLoading}
