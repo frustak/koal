@@ -2,8 +2,7 @@ import _ from "lodash";
 import type { NextPage } from "next";
 import { useState } from "react";
 import { PlanGoalList } from "../features/goal/plan-list";
-import { TodoForm } from "../features/todo/form";
-import { TodosList } from "../features/todo/list";
+import { TodosSection } from "../features/todo/section";
 import { Button } from "../features/ui/button";
 import { Title } from "../features/ui/title";
 import { trpc } from "../utils/trpc";
@@ -78,30 +77,6 @@ const GoalsSection = ({
                 focusedGoal={focusedGoal}
                 setFocusedGoal={setFocusedGoal}
             />
-        </div>
-    );
-};
-
-const TodosSection = ({ goalId }: { goalId: string | null }) => {
-    const [isAddingTodo, setIsAddingTodo] = useState(false);
-    const onClickAddTodo = () => setIsAddingTodo(true);
-    const onAddTodo = () => setIsAddingTodo(false);
-
-    return (
-        <div className="flex flex-col">
-            <Title>Todos</Title>
-            {!goalId && <p>Select a goal to see todos</p>}
-            {goalId && <TodosList goalId={goalId} />}
-            {goalId && (
-                <div className="mt-6">
-                    {isAddingTodo && (
-                        <TodoForm goalId={goalId} onSuccess={onAddTodo} />
-                    )}
-                    {!isAddingTodo && (
-                        <Button onClick={onClickAddTodo}>Add Todo</Button>
-                    )}
-                </div>
-            )}
         </div>
     );
 };
