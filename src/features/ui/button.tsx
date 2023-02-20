@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import type { ButtonHTMLAttributes } from "react";
 import { Loader } from "./loader";
+import { sound } from "./sound";
 
 type BaseButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     loading?: boolean;
@@ -36,9 +37,14 @@ export const Button = ({
                 variant === "filled" && filledClasses,
                 className
             )}
+            onMouseEnter={() => sound.play()}
             disabled={loading}
             type={type}
             {...attrs}
+            onClick={(event) => {
+                sound.play();
+                attrs.onClick?.(event);
+            }}
         >
             {children}
             {loading && <Loader size={20} />}
@@ -62,9 +68,14 @@ export const IconButton = ({
                 !loading && "hover:bg-neutral-100",
                 className
             )}
+            onMouseEnter={() => sound.play()}
             disabled={loading}
             type={type}
             {...attrs}
+            onClick={(event) => {
+                sound.play();
+                attrs.onClick?.(event);
+            }}
         >
             {loading ? <Loader size={20} /> : children}
         </button>
