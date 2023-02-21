@@ -37,7 +37,7 @@ const TodosSection = () => {
             {_.toPairs(goalToTodos).map(([goal, todos]) => (
                 <div key={goal}>
                     <Title>{goal == focusGoal ? `Focus ${goal}` : goal}</Title>
-                    <ul>
+                    <ul className="space-y-3">
                         {todos.map((todo) => (
                             <TodoItem key={todo.id} todo={todo} />
                         ))}
