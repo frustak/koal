@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { format, isAfter, isBefore } from "date-fns";
 import _ from "lodash";
 import type { NextPage } from "next";
-import { TodoItem } from "../features/todo/list";
+import { TodosList } from "../features/todo/list";
 import { Loader } from "../features/ui/loader";
 import { Title } from "../features/ui/title";
 import { trpc } from "../utils/trpc";
@@ -37,11 +37,7 @@ const TodosSection = () => {
             {_.toPairs(goalToTodos).map(([goal, todos]) => (
                 <div key={goal}>
                     <Title>{goal == focusGoal ? `Focus ${goal}` : goal}</Title>
-                    <ul className="space-y-3">
-                        {todos.map((todo) => (
-                            <TodoItem key={todo.id} todo={todo} />
-                        ))}
-                    </ul>
+                    <TodosList todos={todos} />
                 </div>
             ))}
         </div>
