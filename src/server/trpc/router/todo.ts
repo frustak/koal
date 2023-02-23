@@ -172,7 +172,7 @@ export const todoRouter = router({
         .input(
             z.object({
                 goalIds: z.array(z.string()).default([]),
-                priority: z.enum(["not_urgent", "urgent"]),
+                priority: z.enum(["not_urgent", "urgent"]).optional(),
             })
         )
         .output(
