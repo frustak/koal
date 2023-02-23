@@ -7,11 +7,13 @@ const SomedayPage: NextPage = () => {
     const notUrgentTasks = todoQuery.data?.todos ?? [];
 
     return (
-        <TodosList
-            todos={notUrgentTasks}
-            loading={todoQuery.isLoading}
-            emptyMessage="You are a true hero. Nothing to do."
-        />
+        <main className="grid grow grid-cols-2 pt-4">
+            <TodosList
+                todos={notUrgentTasks}
+                loading={todoQuery.isLoading}
+                emptyMessage="You are a true hero. Nothing to do."
+            />
+        </main>
     );
 };
 
