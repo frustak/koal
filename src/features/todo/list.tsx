@@ -5,18 +5,17 @@ import { trpc } from "../../utils/trpc";
 import { IconButton } from "../ui/button";
 import { Loader } from "../ui/loader";
 
-export const TodosList = ({ goalId }: { goalId: string }) => {
-    const todosQuery = trpc.todo.getTodos.useQuery({
-        goalIds: [goalId],
-        priority: "urgent",
-    });
-    const todos = todosQuery.data?.todos ?? [];
-
-    if (todosQuery.isLoading) return <Loader />;
-    if (todos.length === 0)
-        return (
-            <p className="text-xs">Nothing to do but chill, stay frosty ❄️</p>
-        );
+export const TodosList = ({
+    todos,
+    loading,
+    emptyMessage = "Nothing to do but chill, stay frosty ❄️",
+}: {
+    todos: Todo[];
+    loading?: boolean;
+    emptyMessage?: string;
+}) => {
+    if (loading) return <Loader />;
+    if (todos.length === 0) return <p className="text-xs">{emptyMessage}</p>;
 
     return (
         <ul className="space-y-3">

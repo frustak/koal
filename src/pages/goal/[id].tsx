@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { TodosSection } from "../../features/todo/section";
+import { TodoSection } from "../../features/todo/section";
 import { Loader } from "../../features/ui/loader";
 
 const GoalPage: NextPage = () => {
@@ -13,8 +13,8 @@ const GoalPage: NextPage = () => {
     }
 
     return (
-        <main className="grid grow grid-cols-2">
-            <TodosSection goalId={id} />
+        <main className="grid grow grid-cols-2 pt-4">
+            <TodoSection goalId={id} />
         </main>
     );
 };

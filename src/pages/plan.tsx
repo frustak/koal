@@ -2,7 +2,7 @@ import _ from "lodash";
 import type { NextPage } from "next";
 import { useState } from "react";
 import { PlanGoalList } from "../features/goal/plan-list";
-import { TodosSection } from "../features/todo/section";
+import { TodoSection } from "../features/todo/section";
 import { Button } from "../features/ui/button";
 import { Title } from "../features/ui/title";
 import { trpc } from "../utils/trpc";
@@ -28,7 +28,7 @@ const PlanPage: NextPage = () => {
             <hr className="mt-10 rounded-sm border-t-2 border-neutral-700" />
             <div className="grid grow grid-cols-2 divide-x-2 divide-neutral-700">
                 <div className="pt-10 pr-8">
-                    <TodosSection goalId={selectedGoalId} />
+                    <TodoSection goalId={selectedGoalId} />
                 </div>
                 <div className="pt-10 pl-8">
                     <FocusTimeSection
