@@ -13,7 +13,7 @@ const GoalPage: NextPage = () => {
     }
 
     return (
-        <main className="grid grow grid-cols-2">
+        <main className="grid grow grid-cols-2 pt-4">
             <TodoSection goalId={id} />
         </main>
     );
