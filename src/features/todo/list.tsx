@@ -10,7 +10,7 @@ export const TodosList = ({
     loading,
 }: {
     todos: Todo[];
-    loading: boolean;
+    loading?: boolean;
 }) => {
     if (loading) return <Loader />;
 
