@@ -8,16 +8,14 @@ import { Loader } from "../ui/loader";
 export const TodosList = ({
     todos,
     loading,
+    emptyMessage = "Nothing to do but chill, stay frosty ❄️",
 }: {
     todos: Todo[];
     loading?: boolean;
+    emptyMessage?: string;
 }) => {
     if (loading) return <Loader />;
-
-    if (todos.length === 0)
-        return (
-            <p className="text-xs">Nothing to do but chill, stay frosty ❄️</p>
-        );
+    if (todos.length === 0) return <p className="text-xs">{emptyMessage}</p>;
 
     return (
         <ul className="space-y-3">
