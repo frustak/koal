@@ -41,12 +41,12 @@ export const GoalsSection = () => {
 
 export const PlanningSection = () => {
     return (
-        <div className="flex items-start justify-center gap-6">
+        <div className="flex flex-col items-center gap-6">
             <Anchor href="/plan" className="px-5 py-3 !text-xl">
-                New Day
+                Start A New Day
             </Anchor>
             <Anchor href="/day-view" className="px-5 py-3 !text-xl">
-                View Day
+                View Today
             </Anchor>
             <Anchor href="/someday" className="px-5 py-3 !text-xl">
                 Someday Todo List
