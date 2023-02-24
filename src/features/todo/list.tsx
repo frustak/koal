@@ -4,6 +4,7 @@ import type { Todo } from "../../server/trpc/router/todo";
 import { trpc } from "../../utils/trpc";
 import { IconButton } from "../ui/button";
 import { Loader } from "../ui/loader";
+import { Subtitle } from "../ui/title";
 
 export const TodosList = ({
     todos,
@@ -15,7 +16,7 @@ export const TodosList = ({
     emptyMessage?: string;
 }) => {
     if (loading) return <Loader />;
-    if (todos.length === 0) return <p className="text-xs">{emptyMessage}</p>;
+    if (todos.length === 0) return <Subtitle>{emptyMessage}</Subtitle>;
 
     return (
         <ul className="space-y-3">

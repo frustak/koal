@@ -4,7 +4,7 @@ import _ from "lodash";
 import type { NextPage } from "next";
 import { TodosList } from "../features/todo/list";
 import { Loader } from "../features/ui/loader";
-import { Title } from "../features/ui/title";
+import { Subtitle, Title } from "../features/ui/title";
 import { trpc } from "../utils/trpc";
 
 const DayViewPage: NextPage = () => {
@@ -23,18 +23,23 @@ const DayViewPage: NextPage = () => {
 
 const TodosSection = () => {
     const inboxQuery = trpc.planning.inbox.useQuery();
-    const goalToTodos = inboxQuery.data?.goalToTodos ?? [];
+    const goalToTodos = inboxQuery.data?.goalToTodos ?? {};
     const focusGoal = inboxQuery.data?.focusGoal.name;
-
+    const goals = _.toPairs(goalToTodos);
     if (inboxQuery.isLoading) return <Loader />;
-    if (goalToTodos.length === 0)
+
+    if (goals.length === 0) {
         return (
-            <Title>Awesome you are done for today. Come back tomorrow</Title>
+            <div>
+                <Title>Awesome...</Title>
+                <Subtitle>You are done for today. Come back tomorrow</Subtitle>
+            </div>
         );
+    }
 
     return (
         <div className="space-y-10">
-            {_.toPairs(goalToTodos).map(([goal, todos]) => (
+            {goals.map(([goal, todos]) => (
                 <div key={goal}>
                     <Title>{goal == focusGoal ? `Focus ${goal}` : goal}</Title>
                     <TodosList todos={todos} />
@@ -48,11 +53,18 @@ const FocusSection = () => {
     const inboxQuery = trpc.planning.inbox.useQuery();
     const focusTime = inboxQuery.data?.focusTime;
     const now = new Date();
-    const start = focusTime?.start ?? now;
-    const end = focusTime?.end ?? now;
-    const focused = isBefore(now, end) && isAfter(now, start);
+    const start = focusTime?.start;
+    const end = focusTime?.end;
 
     if (inboxQuery.isLoading) return <Loader />;
+    if (!start || !end)
+        return (
+            <Subtitle className="text-center">
+                You haven&apos;t set a focus time
+            </Subtitle>
+        );
+
+    const focused = isBefore(now, end) && isAfter(now, start);
 
     return (
         <div className="flex flex-col items-center">

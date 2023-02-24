@@ -1,5 +1,5 @@
 import { trpc } from "../../utils/trpc";
-import { Title } from "../ui/title";
+import { Subtitle, Title } from "../ui/title";
 import { TodoForm } from "./form";
 import { TodosList } from "./list";
 
@@ -7,7 +7,7 @@ export const TodoSection = ({ goalId }: { goalId: string | null }) => {
     return (
         <div className="flex flex-col">
             <Title>Todos</Title>
-            {!goalId && <p>Select a goal to see todos</p>}
+            {!goalId && <Subtitle>Select a goal to see todos</Subtitle>}
             {goalId && <AllTodoList goalId={goalId} />}
             {goalId && (
                 <div className="mt-6">
