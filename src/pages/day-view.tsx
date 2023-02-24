@@ -4,7 +4,7 @@ import _ from "lodash";
 import type { NextPage } from "next";
 import { TodosList } from "../features/todo/list";
 import { Loader } from "../features/ui/loader";
-import { Title } from "../features/ui/title";
+import { Subtitle, Title } from "../features/ui/title";
 import { trpc } from "../utils/trpc";
 
 const DayViewPage: NextPage = () => {
@@ -32,9 +32,7 @@ const TodosSection = () => {
         return (
             <div>
                 <Title>Awesome...</Title>
-                <p className="text-xs">
-                    You are done for today. Come back tomorrow
-                </p>
+                <Subtitle>You are done for today. Come back tomorrow</Subtitle>
             </div>
         );
     }
@@ -61,9 +59,9 @@ const FocusSection = () => {
     if (inboxQuery.isLoading) return <Loader />;
     if (!start || !end)
         return (
-            <p className="text-center text-xs">
+            <Subtitle className="text-center">
                 You haven&apos;t set a focus time
-            </p>
+            </Subtitle>
         );
 
     const focused = isBefore(now, end) && isAfter(now, start);

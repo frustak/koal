@@ -2,7 +2,9 @@ import clsx from "clsx";
 import { Bookmark } from "phosphor-react";
 import type { Goal } from "../../server/trpc/router/todo";
 import { trpc } from "../../utils/trpc";
+import { Anchor } from "../ui/anchor";
 import { IconButton } from "../ui/button";
+import { Subtitle } from "../ui/title";
 
 export const PlanGoalList = ({
     selectedGoalId,
@@ -17,6 +19,14 @@ export const PlanGoalList = ({
 }) => {
     const goalsQuery = trpc.todo.getGoals.useQuery();
     const goals = goalsQuery.data?.goals ?? [];
+
+    if (goals.length === 0)
+        return (
+            <div className="flex gap-1">
+                <Subtitle>Add a goal first, then plan it here.</Subtitle>
+                <Anchor href="/">click to add a goal</Anchor>
+            </div>
+        );
 
     return (
         <ul className="flex flex-col space-y-3">

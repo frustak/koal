@@ -4,7 +4,7 @@ import { useState } from "react";
 import { PlanGoalList } from "../features/goal/plan-list";
 import { TodoSection } from "../features/todo/section";
 import { Button } from "../features/ui/button";
-import { Title } from "../features/ui/title";
+import { Subtitle, Title } from "../features/ui/title";
 import { trpc } from "../utils/trpc";
 
 interface Goal {
@@ -111,10 +111,10 @@ const FocusTimeSection = ({
     });
 
     let focusedGoalText = (
-        <div>
+        <Subtitle>
             No goal is selected to focus on. Select a goal to focus on it in
             this time.
-        </div>
+        </Subtitle>
     );
     if (focusedGoal) {
         focusedGoalText = (

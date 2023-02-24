@@ -4,6 +4,7 @@ import type { Goal } from "../../server/trpc/router/todo";
 import { trpc } from "../../utils/trpc";
 import { IconButton } from "../ui/button";
 import { Loader } from "../ui/loader";
+import { Subtitle } from "../ui/title";
 
 export const GoalList = () => {
     const goalsQuery = trpc.todo.getGoals.useQuery();
@@ -13,9 +14,7 @@ export const GoalList = () => {
 
     if (goals.length === 0) {
         return (
-            <p className="text-xs leading-6">
-                How can a man lead his life without any goal?
-            </p>
+            <Subtitle>How can a man lead his life without any goal?</Subtitle>
         );
     }
 
