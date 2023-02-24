@@ -48,11 +48,14 @@ const FocusSection = () => {
     const inboxQuery = trpc.planning.inbox.useQuery();
     const focusTime = inboxQuery.data?.focusTime;
     const now = new Date();
-    const start = focusTime?.start ?? now;
-    const end = focusTime?.end ?? now;
-    const focused = isBefore(now, end) && isAfter(now, start);
+    const start = focusTime?.start;
+    const end = focusTime?.end;
 
     if (inboxQuery.isLoading) return <Loader />;
+    if (!start || !end)
+        return <p className="text-center">You haven&apos;t set a focus time</p>;
+
+    const focused = isBefore(now, end) && isAfter(now, start);
 
     return (
         <div className="flex flex-col items-center">
