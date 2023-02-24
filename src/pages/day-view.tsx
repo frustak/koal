@@ -23,18 +23,25 @@ const DayViewPage: NextPage = () => {
 
 const TodosSection = () => {
     const inboxQuery = trpc.planning.inbox.useQuery();
-    const goalToTodos = inboxQuery.data?.goalToTodos ?? [];
+    const goalToTodos = inboxQuery.data?.goalToTodos ?? {};
     const focusGoal = inboxQuery.data?.focusGoal.name;
-
+    const goals = _.toPairs(goalToTodos);
     if (inboxQuery.isLoading) return <Loader />;
-    if (goalToTodos.length === 0)
+
+    if (goals.length === 0) {
         return (
-            <Title>Awesome you are done for today. Come back tomorrow</Title>
+            <div>
+                <Title>Awesome...</Title>
+                <p className="text-xs">
+                    You are done for today. Come back tomorrow
+                </p>
+            </div>
         );
+    }
 
     return (
         <div className="space-y-10">
-            {_.toPairs(goalToTodos).map(([goal, todos]) => (
+            {goals.map(([goal, todos]) => (
                 <div key={goal}>
                     <Title>{goal == focusGoal ? `Focus ${goal}` : goal}</Title>
                     <TodosList todos={todos} />
@@ -53,7 +60,11 @@ const FocusSection = () => {
 
     if (inboxQuery.isLoading) return <Loader />;
     if (!start || !end)
-        return <p className="text-center">You haven&apos;t set a focus time</p>;
+        return (
+            <p className="text-center text-xs">
+                You haven&apos;t set a focus time
+            </p>
+        );
 
     const focused = isBefore(now, end) && isAfter(now, start);
 
