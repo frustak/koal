@@ -39,17 +39,22 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
     };
 
     return (
-        <li className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <li className="flex items-center justify-between gap-6">
+            <div className="flex grow items-center gap-4">
                 <IconButton
                     onClick={toggleDone}
                     loading={updateMutation.isLoading}
                 >
                     {isDone && <Check weight="duotone" />}
                 </IconButton>
-                <span className={clsx(isDone && "line-through")}>
-                    {todo.title}
-                </span>
+                <div className="flex grow items-center justify-between">
+                    <p className={clsx(isDone && "line-through")}>
+                        {todo.title}
+                    </p>
+                    <p className="bg-neutral-50 text-xs text-neutral-500">
+                        {todo.priority === "not_urgent" && "someday"}
+                    </p>
+                </div>
             </div>
             <IconButton onClick={deleteTodo} loading={deleteMutation.isLoading}>
                 <Eraser weight="duotone" />
