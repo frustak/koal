@@ -9,12 +9,15 @@ const goalSchema = z.object({
 
 export type Goal = z.infer<typeof goalSchema>;
 
+export const prioritySchema = z.enum(["urgent", "not_urgent"]);
+
 export const todoSchema = z.object({
     id: z.string(),
     title: z.string(),
     description: z.string().nullish(),
     isDone: z.date().nullable(),
     goalName: z.string(),
+    priority: prioritySchema,
 });
 
 export type Todo = z.infer<typeof todoSchema>;
@@ -96,7 +99,7 @@ export const todoRouter = router({
                 title: z.string(),
                 description: z.string().nullable(),
                 goalId: z.string(),
-                priority: z.enum(["not_urgent", "urgent"]),
+                priority: prioritySchema,
             })
         )
         .output(todoSchema)
@@ -117,6 +120,7 @@ export const todoRouter = router({
                 title: createdTodo.title,
                 isDone: createdTodo.isDone,
                 goalName: createdTodo.Goal.name,
+                priority: prioritySchema.parse(createdTodo.priority),
             };
             return response;
         }),
@@ -126,7 +130,7 @@ export const todoRouter = router({
                 id: z.string(),
                 title: z.string().optional(),
                 description: z.string().optional(),
-                priority: z.enum(["not_urgent", "urgent"]).optional(),
+                priority: prioritySchema.optional(),
             })
         )
         .output(todoSchema)
@@ -148,6 +152,7 @@ export const todoRouter = router({
                 title: updatedTodo.title,
                 isDone: updatedTodo.isDone,
                 goalName: updatedTodo.Goal.name,
+                priority: prioritySchema.parse(updatedTodo.priority),
             };
             return response;
         }),
@@ -172,7 +177,7 @@ export const todoRouter = router({
         .input(
             z.object({
                 goalIds: z.array(z.string()).default([]),
-                priority: z.enum(["not_urgent", "urgent"]).optional(),
+                priority: prioritySchema.optional(),
             })
         )
         .output(
@@ -197,6 +202,7 @@ export const todoRouter = router({
                     title: todo.title,
                     isDone: todo.isDone,
                     goalName: todo.Goal.name,
+                    priority: prioritySchema.parse(todo.priority),
                 })),
             };
         }),
