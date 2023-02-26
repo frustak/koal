@@ -4,7 +4,7 @@ import { z } from "zod";
 import { prisma } from "../../db/client";
 import { protectedProcedure, router } from "../trpc";
 import type { Todo } from "./todo";
-import { todoSchema } from "./todo";
+import { prioritySchema, todoSchema } from "./todo";
 
 export const planningRouter = router({
     setDayFocus: protectedProcedure
@@ -93,6 +93,7 @@ export const planningRouter = router({
                     title: todo.title,
                     isDone: todo.isDone,
                     goalName: todo.Goal.name,
+                    priority: prioritySchema.parse(todo.priority),
                 };
                 if (todoGroupedByGoal[todo.Goal.name]) {
                     todoGroupedByGoal[todo.Goal.name]?.push(transformedTodo);
