@@ -194,6 +194,7 @@ export const todoRouter = router({
                         ? { goalId: { in: input.goalIds } }
                         : {}),
                 },
+                orderBy: { priority: "desc" },
                 include: { Goal: true },
             });
             return {

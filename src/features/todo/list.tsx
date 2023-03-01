@@ -18,17 +18,9 @@ export const TodosList = ({
     if (loading) return <Loader />;
     if (todos.length === 0) return <Subtitle>{emptyMessage}</Subtitle>;
 
-    const ordered = [...todos].sort((a, b) =>
-        a.priority === "urgent" && b.priority === "not_urgent"
-            ? -1
-            : b.priority === "urgent" && a.priority === "not_urgent"
-            ? 1
-            : 0
-    );
-
     return (
         <ul className="space-y-3">
-            {ordered.map((todo) => (
+            {todos.map((todo) => (
                 <TodoItem key={todo.id} todo={todo} />
             ))}
         </ul>
