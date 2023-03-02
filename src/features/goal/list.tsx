@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Eraser } from "phosphor-react";
+import { Eraser, Trash } from "phosphor-react";
+import { useState } from "react";
 import type { Goal } from "../../server/trpc/router/todo";
 import { trpc } from "../../utils/trpc";
 import { IconButton } from "../ui/button";
@@ -28,9 +29,6 @@ export const GoalList = () => {
 };
 
 const GoalItem = ({ goal }: { goal: Goal }) => {
-    const deleteGoalMutation = trpc.todo.deleteGoal.useMutation();
-    const handleDelete = () => deleteGoalMutation.mutate({ goalId: goal.id });
-
     return (
         <li className="flex items-center justify-between">
             <Link
@@ -39,12 +37,32 @@ const GoalItem = ({ goal }: { goal: Goal }) => {
             >
                 {goal.name}
             </Link>
-            <IconButton
-                onClick={handleDelete}
-                loading={deleteGoalMutation.isLoading}
-            >
-                <Eraser weight="duotone" />
-            </IconButton>
+            <DeleteButton goalId={goal.id} />
         </li>
+    );
+};
+
+const DeleteButton = ({ goalId }: { goalId: string }) => {
+    const [confirmed, setConfirmed] = useState(false);
+    const deleteGoalMutation = trpc.todo.deleteGoal.useMutation();
+    const handleDelete = () => {
+        if (!confirmed) {
+            setConfirmed(true);
+        } else {
+            deleteGoalMutation.mutate(
+                { goalId },
+                { onSuccess: () => setConfirmed(false) }
+            );
+        }
+    };
+
+    return (
+        <IconButton
+            onClick={handleDelete}
+            loading={deleteGoalMutation.isLoading}
+        >
+            {!confirmed && <Eraser weight="duotone" />}
+            {confirmed && <Trash weight="duotone" />}
+        </IconButton>
     );
 };
