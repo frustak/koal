@@ -43,15 +43,15 @@ const GoalItem = ({ goal }: { goal: Goal }) => {
 };
 
 const DeleteButton = ({ goalId }: { goalId: string }) => {
-    const [confirmed, setConfirmed] = useState(false);
+    const [confirming, setConfirming] = useState(false);
     const deleteGoalMutation = trpc.todo.deleteGoal.useMutation();
     const handleDelete = () => {
-        if (!confirmed) {
-            setConfirmed(true);
+        if (!confirming) {
+            setConfirming(true);
         } else {
             deleteGoalMutation.mutate(
                 { goalId },
-                { onSuccess: () => setConfirmed(false) }
+                { onSuccess: () => setConfirming(false) }
             );
         }
     };
@@ -60,9 +60,10 @@ const DeleteButton = ({ goalId }: { goalId: string }) => {
         <IconButton
             onClick={handleDelete}
             loading={deleteGoalMutation.isLoading}
+            onMouseLeave={() => setConfirming(false)}
         >
-            {!confirmed && <Eraser weight="duotone" />}
-            {confirmed && <Trash weight="duotone" />}
+            {!confirming && <Eraser weight="duotone" />}
+            {confirming && <Trash weight="duotone" />}
         </IconButton>
     );
 };
