@@ -1,12 +1,11 @@
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["referentialIntegrity"]
+    provider = "prisma-client-js"
 }
 
 datasource db {
-    provider             = "sqlite"
-    url                  = env("DATABASE_URL")
-    referentialIntegrity = "prisma"
+    provider     = "sqlite"
+    url          = env("DATABASE_URL")
+    relationMode = "prisma"
 }
 
 model Todo {
@@ -18,8 +17,9 @@ model Todo {
     isDone      DateTime?
     priority    String    @default("urgent")
     goalId      String
+    Goal        Goal      @relation(fields: [goalId], references: [id])
 
-    Goal Goal @relation(fields: [goalId], references: [id])
+    @@index([goalId])
 }
 
 model Goal {
@@ -28,9 +28,11 @@ model Goal {
     updatedAt DateTime   @updatedAt
     name      String
     ownerId   String
-    User      User       @relation(fields: [ownerId], references: [id])
     Todo      Todo[]
     DayFocus  DayFocus[]
+    User      User       @relation(fields: [ownerId], references: [id])
+
+    @@index([ownerId])
 }
 
 model DayFocus {
@@ -41,11 +43,11 @@ model DayFocus {
     goalId         String
     focusTimeStart DateTime
     focusTimeEnd   DateTime
-
-    User User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-    Goal Goal @relation(fields: [goalId], references: [id], onDelete: Cascade)
+    User           User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    Goal           Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
 
     @@unique([ownerId, date])
+    @@index([goalId])
 }
 
 // Necessary for Next auth
@@ -65,6 +67,7 @@ model Account {
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([provider, providerAccountId])
+    @@index([userId])
 }
 
 model Session {
@@ -73,6 +76,8 @@ model Session {
     userId       String
     expires      DateTime
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
 }
 
 model User {
