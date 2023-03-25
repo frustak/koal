@@ -222,4 +222,20 @@ export const todoRouter = router({
                 where: { id: input.todoId },
             });
         }),
+    updateOrders: protectedProcedure
+        .input(
+            z.object({
+                todoIds: z.array(z.string()),
+            })
+        )
+        .mutation(async ({ input }) => {
+            await prisma.$transaction(
+                input.todoIds.map((todoId, index) =>
+                    prisma.todo.update({
+                        where: { id: todoId },
+                        data: { order: index },
+                    })
+                )
+            );
+        }),
 });
