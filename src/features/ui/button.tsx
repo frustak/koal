@@ -65,7 +65,8 @@ export const IconButton = ({
         <button
             className={clsx(
                 "inline-flex h-6 w-6 items-center justify-center rounded-sm border-2 border-neutral-700 text-neutral-700",
-                !loading && "hover:bg-neutral-100",
+                !loading && !attrs.disabled && "hover:bg-neutral-100",
+                attrs.disabled && "opacity-50",
                 className
             )}
             onMouseEnter={() => sound.play()}

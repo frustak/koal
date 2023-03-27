@@ -194,7 +194,11 @@ export const todoRouter = router({
                         ? { goalId: { in: input.goalIds } }
                         : {}),
                 },
-                orderBy: { priority: "desc" },
+                orderBy: [
+                    { priority: "desc" },
+                    { order: "asc" },
+                    { createdAt: "asc" },
+                ],
                 include: { Goal: true },
             });
             return {
@@ -217,5 +221,21 @@ export const todoRouter = router({
             await prisma.todo.delete({
                 where: { id: input.todoId },
             });
+        }),
+    updateOrders: protectedProcedure
+        .input(
+            z.object({
+                todoIds: z.array(z.string()),
+            })
+        )
+        .mutation(async ({ input }) => {
+            await prisma.$transaction(
+                input.todoIds.map((todoId, index) =>
+                    prisma.todo.update({
+                        where: { id: todoId },
+                        data: { order: index },
+                    })
+                )
+            );
         }),
 });
