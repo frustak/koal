@@ -110,7 +110,7 @@ export const TodoItem = ({
                     )}
                 >
                     <IconButton
-                        className="h-4 w-4 text-xs"
+                        className="!h-4 !w-4 !text-xs"
                         onClick={moveUp}
                         disabled={isFirst}
                         loading={orderLoading}
@@ -118,7 +118,7 @@ export const TodoItem = ({
                         <CaretUp weight="duotone" />
                     </IconButton>
                     <IconButton
-                        className="h-4 w-4 text-xs"
+                        className="!h-4 !w-4 !text-xs"
                         onClick={moveDown}
                         disabled={isLast}
                         loading={orderLoading}
