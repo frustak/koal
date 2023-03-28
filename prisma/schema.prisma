@@ -18,7 +18,7 @@ model Todo {
     priority    String    @default("urgent")
     goalId      String
     order       Int?
-    Goal        Goal      @relation(fields: [goalId], references: [id])
+    Goal        Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
 
     @@index([goalId])
 }
