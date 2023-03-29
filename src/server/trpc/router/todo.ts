@@ -238,4 +238,20 @@ export const todoRouter = router({
                 )
             );
         }),
+    snoozeTodo: protectedProcedure
+        .input(
+            z.object({
+                todoId: z.string(),
+            })
+        )
+        .mutation(async ({ input }) => {
+            await prisma.todo.update({
+                where: { id: input.todoId },
+                data: {
+                    showFromDate: new Date(
+                        new Date().setHours(0, 0, 0, 0) + 86400000
+                    ),
+                },
+            });
+        }),
 });

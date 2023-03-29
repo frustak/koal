@@ -9,16 +9,17 @@ datasource db {
 }
 
 model Todo {
-    id          String    @id @default(cuid())
-    createdAt   DateTime  @default(now())
-    updatedAt   DateTime  @updatedAt
-    title       String
-    description String?
-    isDone      DateTime?
-    priority    String    @default("urgent")
-    goalId      String
-    order       Int?
-    Goal        Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
+    id           String    @id @default(cuid())
+    createdAt    DateTime  @default(now())
+    updatedAt    DateTime  @updatedAt
+    title        String
+    description  String?
+    isDone       DateTime?
+    priority     String    @default("urgent")
+    goalId       String
+    order        Int?
+    showFromDate DateTime? @default("2023-03-29T19:55:51.666Z")
+    Goal         Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
 
     @@index([goalId])
 }

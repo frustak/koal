@@ -74,6 +74,9 @@ export const planningRouter = router({
                     isDone: null,
                     Goal: { ownerId: ctx.session.user.id },
                     priority: "urgent",
+                    showFromDate: {
+                        gte: new Date(new Date().setHours(0, 0, 0, 0)),
+                    },
                 },
                 include: { Goal: true },
             });
