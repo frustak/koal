@@ -6,7 +6,7 @@
         "build": "next build",
         "start": "prisma db push && next start",
         "dev": "next dev",
-        "lint": "next lint && prettier --check .",
+        "lint": "eslint . && prettier --check .",
         "fmt": "prettier --write .",
         "check": "tsc --skipLibCheck --noEmit",
         "prisma:refresh": "prisma generate && prisma db push",
