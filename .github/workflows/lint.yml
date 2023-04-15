@@ -1,29 +1,22 @@
-name: Lint
+name: Check JavaScript for conformance with Prettier
 
 on:
-    push:
-        branches:
-            - main
-    pull_request:
-        branches:
-            - main
-
-permissions:
-    checks: write
-    contents: write
+  push:
+  pull_request:
 
 jobs:
-    run-linters:
-        name: Run linters
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout Code
-            uses: actions/checkout@v3
-            with:
-              fetch-depth: 0
-          - name: Lint Code Base
-            uses: github/super-linter/slim@v4
-            env:
-              DEFAULT_BRANCH: main
-              VALIDATE_ALL_CODEBASE: false
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      name: Configure npm caching
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-${{ hashFiles('**/workflows/lint.yml') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+    - name: Run prettier
+      run: |-
+        npx prettier --check '**/*[!.min].{js,ts,md}'
