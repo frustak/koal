@@ -42,7 +42,7 @@ const TodosSection = () => {
             {goals.map(([goal, todos]) => (
                 <div key={goal}>
                     <Title>{goal == focusGoal ? `Focus ${goal}` : goal}</Title>
-                    <TodosList todos={todos} />
+                    <TodosList todos={todos} options={{ withSnooze: true }} />
                 </div>
             ))}
         </div>

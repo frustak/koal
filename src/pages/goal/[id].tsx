@@ -14,7 +14,7 @@ const GoalPage: NextPage = () => {
 
     return (
         <main className="grid grow grid-cols-2 pt-4">
-            <TodoSection goalId={id} withMove />
+            <TodoSection goalId={id} options={{ withMove: true }} />
         </main>
     );
 };

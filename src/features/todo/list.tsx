@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { CaretDown, CaretUp, Check, Eraser } from "phosphor-react";
+import { CaretDown, CaretUp, Check, Eraser, MoonStars } from "phosphor-react";
 import type { Todo } from "../../server/trpc/router/todo";
 import { trpc } from "../../utils/trpc";
 import { IconButton } from "../ui/button";
@@ -10,12 +10,12 @@ export const TodosList = ({
     todos,
     loading,
     emptyMessage = "Nothing to do but chill, stay frosty ❄️",
-    withMove,
+    options,
 }: {
     todos: Todo[];
     loading?: boolean;
     emptyMessage?: string;
-    withMove?: boolean;
+    options?: TodoItemOptions;
 }) => {
     const ordersMutation = trpc.todo.updateOrders.useMutation();
 
@@ -46,11 +46,16 @@ export const TodosList = ({
                     isFirst={index === 0}
                     isLast={index === todos.length - 1}
                     orderLoading={ordersMutation.isLoading}
-                    withMove={withMove}
+                    options={options}
                 />
             ))}
         </ul>
     );
+};
+
+export type TodoItemOptions = {
+    withMove?: boolean;
+    withSnooze?: boolean;
 };
 
 export const TodoItem = ({
@@ -59,18 +64,21 @@ export const TodoItem = ({
     isFirst,
     isLast,
     orderLoading,
-    withMove,
+    options,
 }: {
     todo: Todo;
     move: (todoId: string, direction: "up" | "down") => void;
     isFirst: boolean;
     isLast: boolean;
     orderLoading: boolean;
-    withMove?: boolean;
+    options?: TodoItemOptions;
 }) => {
     const updateMutation = trpc.todo.updateTodoStatus.useMutation();
     const deleteMutation = trpc.todo.deleteTodo.useMutation();
+    const snoozeMutation = trpc.todo.snoozeTodo.useMutation();
+
     const isDone = !!todo.isDone;
+
     const toggleDone = () => {
         updateMutation.mutate({ id: todo.id, isDone: !isDone });
     };
@@ -82,6 +90,9 @@ export const TodoItem = ({
     };
     const moveDown = () => {
         move(todo.id, "down");
+    };
+    const snooze = () => {
+        snoozeMutation.mutate({ todoId: todo.id });
     };
 
     return (
@@ -103,32 +114,41 @@ export const TodoItem = ({
                 </div>
             </div>
             <div className="invisible flex items-center gap-2 group-hover:visible">
-                <div
-                    className={clsx(
-                        "flex flex-col gap-1",
-                        !withMove && "invisible"
-                    )}
-                >
+                {options?.withSnooze && (
                     <IconButton
-                        className="!h-4 !w-4 !text-xs"
-                        onClick={moveUp}
-                        disabled={isFirst}
-                        loading={orderLoading}
+                        onClick={snooze}
+                        loading={snoozeMutation.isLoading}
+                        title="Snooze"
                     >
-                        <CaretUp weight="duotone" />
+                        <MoonStars weight="duotone" />
                     </IconButton>
-                    <IconButton
-                        className="!h-4 !w-4 !text-xs"
-                        onClick={moveDown}
-                        disabled={isLast}
-                        loading={orderLoading}
-                    >
-                        <CaretDown weight="duotone" />
-                    </IconButton>
-                </div>
+                )}
+                {options?.withMove && (
+                    <div className="flex flex-col gap-1">
+                        <IconButton
+                            className="!h-4 !w-4 !text-xs"
+                            onClick={moveUp}
+                            disabled={isFirst}
+                            loading={orderLoading}
+                            title="Move up"
+                        >
+                            <CaretUp weight="duotone" />
+                        </IconButton>
+                        <IconButton
+                            className="!h-4 !w-4 !text-xs"
+                            onClick={moveDown}
+                            disabled={isLast}
+                            loading={orderLoading}
+                            title="Move down"
+                        >
+                            <CaretDown weight="duotone" />
+                        </IconButton>
+                    </div>
+                )}
                 <IconButton
                     onClick={deleteTodo}
                     loading={deleteMutation.isLoading}
+                    title="Delete"
                 >
                     <Eraser weight="duotone" />
                 </IconButton>
