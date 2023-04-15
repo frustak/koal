@@ -4,13 +4,13 @@
     "private": true,
     "scripts": {
         "build": "next build",
-        "dev": "next dev",
-        "postinstall": "prisma generate",
-        "lint": "next lint",
         "start": "prisma db push && next start",
+        "dev": "next dev",
+        "lint": "next lint && prettier --check .",
         "fmt": "prettier --write .",
         "check": "tsc --skipLibCheck --noEmit",
-        "prisma:refresh": "prisma generate && prisma db push"
+        "prisma:refresh": "prisma generate && prisma db push",
+        "postinstall": "prisma generate"
     },
     "dependencies": {
         "@hookform/resolvers": "^3.0.0",
