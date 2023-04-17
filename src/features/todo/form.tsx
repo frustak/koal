@@ -5,7 +5,7 @@ import { trpc } from "../../utils/trpc";
 import { Button } from "../ui/button";
 
 const schema = z.object({
-    title: z.string().min(1).max(100),
+    title: z.string().min(1).max(1000),
     description: z.string().max(1000),
     priority: z.enum(["urgent", "not_urgent"]),
 });
