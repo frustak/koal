@@ -8,6 +8,7 @@ const schema = z.object({
     title: z.string().min(1).max(1000),
     description: z.string().max(1000),
     priority: z.enum(["urgent", "not_urgent"]),
+    dueDate: z.date().optional(),
 });
 
 type Schema = z.infer<typeof schema>;
@@ -15,10 +16,16 @@ type Schema = z.infer<typeof schema>;
 export const TodoForm = ({ goalId }: { goalId: string }) => {
     const addTodoMutation = trpc.todo.createTodo.useMutation();
     const form = useForm<Schema>({
-        defaultValues: { title: "", description: "", priority: "urgent" },
+        defaultValues: {
+            title: "",
+            description: "",
+            priority: "urgent",
+            dueDate: new Date(),
+        },
         resolver: zodResolver(schema),
     });
     const onSubmit = form.handleSubmit((values) => {
+        console.log(values);
         addTodoMutation.mutate(
             { ...values, goalId },
             { onSuccess: () => form.reset() }

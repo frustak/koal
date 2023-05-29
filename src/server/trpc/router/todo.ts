@@ -18,6 +18,7 @@ export const todoSchema = z.object({
     isDone: z.date().nullable(),
     goalName: z.string(),
     priority: prioritySchema,
+    dueDate: z.date().nullable(),
 });
 
 export type Todo = z.infer<typeof todoSchema>;
@@ -100,16 +101,23 @@ export const todoRouter = router({
                 description: z.string().nullable(),
                 goalId: z.string(),
                 priority: prioritySchema,
+                dueDate: z.date().optional(),
             })
         )
         .output(todoSchema)
+
         .mutation(async ({ input }) => {
+            let dueDateAdjusted = null;
+            if (input.dueDate) {
+                dueDateAdjusted = new Date(input.dueDate.setHours(0, 0, 0, 0));
+            }
             const createdTodo = await prisma.todo.create({
                 data: {
                     title: input.title,
                     description: input.description,
                     goalId: input.goalId,
                     priority: input.priority,
+                    showFromDate: dueDateAdjusted,
                 },
                 include: {
                     Goal: true,
@@ -121,6 +129,7 @@ export const todoRouter = router({
                 isDone: createdTodo.isDone,
                 goalName: createdTodo.Goal.name,
                 priority: prioritySchema.parse(createdTodo.priority),
+                dueDate: createdTodo.showFromDate,
             };
             return response;
         }),
@@ -131,6 +140,7 @@ export const todoRouter = router({
                 title: z.string().optional(),
                 description: z.string().optional(),
                 priority: prioritySchema.optional(),
+                dueDate: z.date().nullable(),
             })
         )
         .output(todoSchema)
@@ -139,6 +149,7 @@ export const todoRouter = router({
                 data: {
                     title: input.title,
                     description: input.description,
+                    showFromDate: input.dueDate,
                 },
                 where: {
                     id: input.id,
@@ -153,6 +164,7 @@ export const todoRouter = router({
                 isDone: updatedTodo.isDone,
                 goalName: updatedTodo.Goal.name,
                 priority: prioritySchema.parse(updatedTodo.priority),
+                dueDate: updatedTodo.showFromDate,
             };
             return response;
         }),
@@ -208,6 +220,7 @@ export const todoRouter = router({
                     isDone: todo.isDone,
                     goalName: todo.Goal.name,
                     priority: prioritySchema.parse(todo.priority),
+                    dueDate: todo.showFromDate,
                 })),
             };
         }),

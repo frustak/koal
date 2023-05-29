@@ -97,6 +97,7 @@ export const planningRouter = router({
                     isDone: todo.isDone,
                     goalName: todo.Goal.name,
                     priority: prioritySchema.parse(todo.priority),
+                    dueDate: todo.showFromDate,
                 };
                 if (todoGroupedByGoal[todo.Goal.name]) {
                     todoGroupedByGoal[todo.Goal.name]?.push(transformedTodo);
